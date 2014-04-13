@@ -1,3 +1,8 @@
+/**
+ * Angular Selectize2
+ * https://github.com/machineboy2045/angular-selectize
+ **/
+
 angular.module('selectize', []).value('selectizeConfig', {}).directive("selectize", ['selectizeConfig', '$timeout', function(selectizeConfig, $timeout) {
 
   return {
