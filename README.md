@@ -16,28 +16,28 @@ I decided to adapt Selectize for Angular after being disatisfied with the perfor
 
 ## Usage
 
-We use [bower](https://github.com/bower/bower) for dependency management. Install Angular-Selectize2 into your project by running the command
+We use [bower](https://github.com/bower/bower) for dependency management. Install Angular-selectize into your project by running the command
 
 `$ bower install angular-selectize2`
 
 If you use a `bower.json` file in your project, you can have Bower save ui-select2 as a dependency by passing the `--save` or `--save-dev` flag with the above command.
 
-This will copy the ui-selectize2 files into your `bower_components` folder, along with its dependencies. Load the script files in your application:
+This will copy the ui-selectize files into your `bower_components` folder, along with its dependencies. Load the script files in your application:
 ```html
 <link rel="stylesheet" href="bower_components/selectize/dist/css/selectize.default.css ">
 <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
 <script type="text/javascript" src="bower_components/selectize/dist/js/standalone/selectize.min.js.js"></script>
 <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-<script type="text/javascript" src="bower_components/angular-selectize2/dist/selectize2.js"></script>
+<script type="text/javascript" src="bower_components/angular-selectize/dist/selectize.js"></script>
 ```
 
 (Note that `jquery` must be loaded before `angular` so that it doesn't use `jqLite` internally)
 
 
-Add the selectize2 module as a dependency to your application module:
+Add the selectize module as a dependency to your application module:
 
 ```javascript
-var myAppModule = angular.module('MyApp', ['selectize2']);
+var myAppModule = angular.module('MyApp', ['selectize']);
 ```
 
 Setup your controller variables:
@@ -73,10 +73,10 @@ Theoretically, all of the config options from the original selectize should work
 - [Selectize API](https://github.com/brianreavis/selectize.js/blob/master/docs/api.md)
 
 ##Global Defaults
-To define global defaults, you can configure the `selectize2` injectable:
+To define global defaults, you can configure the `selectize` injectable:
 
 ```javascript
-myAppModule.run(['selectize2Config', function(selectize2Config) {
-	selectize2Config.delimiter = ",";
+myAppModule.run(['selectizeConfig', function(selectizeConfig) {
+	selectizeConfig.delimiter = ",";
 }]);
 ```
