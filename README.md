@@ -2,7 +2,7 @@ angular-selectize2
 ==================
 This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http://brianreavis.github.io/selectize.js/). It supports 2-way model binding, ng-required, and 2-way binding of the options. 
 
-I decided to adapt Selectize for Angular after being disatisfied with the performance of ui-elect2 when there were many options on the page.
+I decided to adapt Selectize for Angular after being disatisfied with the performance of ui-select2 when there were many options on the page.
 
 
 ##Demo
