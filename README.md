@@ -84,7 +84,13 @@ $scope.config = {
 }
 ```
 
-### Tag editor:
+### Inline Config
+
+```html
+<input type="text" selectize="{create:true, maxItems:10}" options='myOptions' ng-model="myModel">
+```
+
+### Tag editor
 
 ```javascript
 $scope.myModel = 1;
