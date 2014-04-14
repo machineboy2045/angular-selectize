@@ -20,7 +20,7 @@ We use [bower](https://github.com/bower/bower) for dependency management. Instal
 
 `$ bower install angular-selectize2`
 
-If you use a `bower.json` file in your project, you can have Bower save ui-select2 as a dependency by passing the `--save` or `--save-dev` flag with the above command.
+If you use a `bower.json` file in your project, you can have Bower save angular-selectize as a dependency by passing the `--save` or `--save-dev` flag with the above command.
 
 This will copy the ui-selectize files into your `bower_components` folder, along with its dependencies. Load the script files in your application:
 ```html
