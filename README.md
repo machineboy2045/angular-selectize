@@ -67,6 +67,8 @@ Add the input element to your view template:
 ```
 
 ##Config
+By default, the model value is stored as an array. If you prefer it be stored as a string, you can set `config.stringify = true` So instead of `[1,2,3]` it would be stored as `"1|2|3"` depending on your chosen delimiter.
+
 Theoretically, all of the config options from the original selectize should work. But I have not been able to test them all.
 
 - [Selectize config options](https://github.com/brianreavis/selectize.js/blob/master/docs/usage.md)
