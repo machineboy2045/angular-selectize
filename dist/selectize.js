@@ -36,7 +36,12 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       // refresh angular models when selectize changes
       //=============================================================
       function refreshAngularItems(items) {
-        $timeout(function(){ scope.ngModel = items },0);
+        $timeout(function(){ 
+          if(!scope.config.stringify)
+            items = String(items).split(selectize.settings.delimiter);
+            
+          scope.ngModel = items;
+        },0);
       }
       
       function refreshAngularOptions(value, data) {
@@ -47,7 +52,8 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       // update selectize when angular models change
       //=============================================================
       function refreshSelectize(items){
-        items = String(items).split(selectize.settings.delimiter)
+        if(scope.config.stringify)
+          items = String(items).split(selectize.settings.delimiter)
         
         //options
         angular.forEach(items, function(opt){
