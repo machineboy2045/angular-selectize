@@ -7,29 +7,42 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
   return {
     restrict: 'A',
-    scope: {ngModel: '=', config: '=selectize', options: '=options'},
-    link: function(scope, element, attrs) {
+    require: '^ngModel',
+    link: function(scope, element, attrs, ngModel) {
+      var prevModelValue;
+      var config = scope.$eval(attrs.selectize);
+
+      if(selectizeConfig){
+        config = angular.extend(config, selectizeConfig);
+      }
+      
+      //=============================================================
+      // required validation
+      //=============================================================
+      function validateRequired(value){
+        var valid = !attrs.required || (value && value.length);
+        ngModel.$setValidity('required', valid);
+        return value;
+      }
+      
+      ngModel.$parsers.push(validateRequired)
 
       //=============================================================
       // setup
       //=============================================================
-      scope.config.options = scope.options;
-
-      if(selectizeConfig){
-        scope.config = angular.extend(scope.config, selectizeConfig);
-      }
+      config.options = scope[attrs.options];
 
       //support simple arrays
       var options = [];
-      if(scope.config.options && typeof scope.config.options[0] === 'string'){
-        angular.forEach(scope.config.options, function(opt){
+      if(config.options && typeof config.options[0] === 'string'){
+        angular.forEach(config.options, function(opt){
           options.push({text:opt, value:opt});
         })
-        scope.config.options = options;
+        config.options = options;
       }
       
       //initialize
-      element.selectize(scope.config);
+      element.selectize(config);
       var selectize = element[0].selectize;
       
       //=============================================================
@@ -37,22 +50,35 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       //=============================================================
       function refreshAngularItems(items) {
         $timeout(function(){ 
-          if(!scope.config.stringify)
-            items = String(items).split(selectize.settings.delimiter);
+          if(!config.stringify){
+            if(!(items && items.length)){
+              items = [];
+            }else{
+              items = String(items).split(selectize.settings.delimiter);
+            }
+          }
             
-          scope.ngModel = items;
+          ngModel.$setViewValue(items);
         },0);
       }
       
       function refreshAngularOptions(value, data) {
-        $timeout(function(){ scope.options.push(data) },0);
+        $timeout(function(){ config.options.push(data) },0);
       }
       
       //=============================================================
       // update selectize when angular models change
       //=============================================================
-      function refreshSelectize(items){
-        if(scope.config.stringify)
+      function refreshSelectize(){
+        var items = ngModel.$modelValue;
+        if(angular.equals(items, prevModelValue)){
+            return;
+        }else{
+          prevModelValue = items;
+        }
+        
+        
+        if(config.stringify)
           items = String(items).split(selectize.settings.delimiter)
         
         //options
@@ -68,16 +94,13 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         selectize.setValue(items); 
       }
       
-      
+
       //=============================================================
       // watchers
       //=============================================================
       selectize.on('change', refreshAngularItems);
       selectize.on('option_add', refreshAngularOptions);
-      scope.$watch('ngModel', function(curr){
-        if(curr)
-          refreshSelectize(curr);
-      },true);
+      ngModel.$render = refreshSelectize;
       
     }
   };
