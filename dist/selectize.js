@@ -48,8 +48,17 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         selectize.addOption(newOpt);
       }
       
+      function updateClass(){
+        if( ngModel.$invalid ){
+          selectize.$control.addClass('ng-invalid')
+        }else{
+          selectize.$control.removeClass('ng-invalid')
+        }
+      }
+      
       function refreshSelectize(value){
         $timeout(function(){
+          updateClass();
           createOptions(value);
           selectize.refreshOptions(false);
           selectize.setValue(value); 
@@ -60,6 +69,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         disable ? selectize.disable() : selectize.enable();
       }
       
+
       selectize.on('option_add', refreshAngularOptions);
       scope.$watch(function(){ return ngModel.$modelValue }, refreshSelectize, true);
       scope.$watch(function(){ return attrs.disabled }, toggle, true);
