@@ -56,19 +56,17 @@ $scope.config = {
   valueField: 'id',
   labelField: 'title',
   delimiter: '|',
-//  maxItems: 1
+  // maxItems: 1
 }
 ```
 
-Add the input element to your view template:
+Add the select element to your view template:
 
 ```html
-<input type="text" selectize="config" options='myOptions' ng-model="myModel">
+<select selectize="config" options='myOptions' ng-model="myModel"></select>
 ```
 
 ##Config
-By default, the model value is stored as an array. If you prefer it be stored as a string, you can set `config.stringify = true` So instead of `[1,2,3]` it would be stored as `"1|2|3"` depending on your chosen delimiter.
-
 Theoretically, all of the config options from the original selectize should work. But I have not been able to test them all.
 
 - [Selectize config options](https://github.com/brianreavis/selectize.js/blob/master/docs/usage.md)
@@ -89,7 +87,7 @@ $scope.config = {
 ### Inline Config
 
 ```html
-<input type="text" selectize="{create:true, maxItems:10}" options='myOptions' ng-model="myModel">
+<select selectize="{create:true, maxItems:10}" options='myOptions' ng-model="myModel"></select>
 ```
 
 ### Tag editor
@@ -112,7 +110,7 @@ $scope.config = {
 To define global defaults, you can configure the `selectize` injectable:
 
 ```javascript
-myAppModule.run(['selectizeConfig', function(selectizeConfig) {
-	selectizeConfig.delimiter = ",";
-}]);
+MyApp.value('selectizeConfig', {
+  delimiter: '|'
+});
 ```

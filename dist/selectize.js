@@ -9,100 +9,55 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
     restrict: 'A',
     require: '^ngModel',
     link: function(scope, element, attrs, ngModel) {
-      var prevModelValue;
-      var config = scope.$eval(attrs.selectize);
+      var config;
       var selectize;
-
+      
+      //config
+      config = scope.$eval(attrs.selectize);
+      config.options = scope.$eval(attrs.options) || [];
       if(selectizeConfig){
         config = angular.extend(config, selectizeConfig);
       }
+      config.maxItems = config.maxItems || null; //default to tag editor
       
-      //=============================================================
-      // required validation
-      //=============================================================
-      function validateRequired(value){
-        var valid = !attrs.required || (value && value.length);
-        ngModel.$setValidity('required', valid);
-        return value;
+      //support simple arrays
+      if(config.options && typeof config.options[0] === 'string'){
+        config.options = $.map(config.options, function(opt, index){
+          return {id:index, text:opt, value:opt};
+        })
+        config.sortField = config.sortField || 'id'; //preserve order
       }
-      
-      ngModel.$parsers.push(validateRequired);
-      
-      //=============================================================
-      // refresh angular models when selectize changes
-      //=============================================================
-      function refreshAngularItems(items) {
-        $timeout(function(){ 
-          if(!config.stringify){
-            if(!(items && items.length)){
-              items = [];
-            }else{
-              items = String(items).split(selectize.settings.delimiter);
-            }
-          }
-            
-          ngModel.$setViewValue(items);
-        },0);
-      }
+    
+      //init
+      element.selectize(config);
+      selectize = element[0].selectize;
       
       function refreshAngularOptions(value, data) {
-        $timeout(function(){ config.options.push(data) },0);
+        config.options = selectize.options;
+      }
+    
+      function createOptions(input){
+        if($.isArray(input)){
+          for(var i = 0, opt; opt = input[i++];){
+            createOptions(input);
+          }
+        }
+        var newOpt = {};
+        newOpt[selectize.settings.valueField] = input;
+        newOpt[selectize.settings.labelField] = input;
+        selectize.addOption(newOpt);
       }
       
-      //=============================================================
-      // update selectize when angular models change
-      //=============================================================
-      function refreshSelectize(){
-        var items = ngModel.$modelValue;
-        if(angular.equals(items, prevModelValue)){
-            return;
-        }else{
-          prevModelValue = items;
-        }
-        
-        
-        if(config.stringify)
-          items = String(items).split(selectize.settings.delimiter)
-        
-        //options
-        angular.forEach(items, function(opt){
-          var newOpt = {};
-          newOpt[selectize.settings.valueField] = opt;
-          newOpt[selectize.settings.labelField] = opt;
-          selectize.addOption(newOpt);
+      function refreshSelectize(value){
+        $timeout(function(){
+          createOptions(value);
+          selectize.refreshOptions(false);
+          selectize.setValue(value); 
         });
-        selectize.refreshOptions(false);
-        
-        //items
-        selectize.setValue(items); 
       }
       
-
-      //=============================================================
-      // setup
-      //=============================================================
-      $timeout(function(){
-        config.options = scope.$eval(attrs.options);
-
-        //support simple arrays
-        var options = [];
-        if(config.options && typeof config.options[0] === 'string'){
-          angular.forEach(config.options, function(opt, index){
-            options.push({id:index, text:opt, value:opt});
-          })
-          config.options = options;
-          config.sortField = config.sortField || 'id'; //preserve order
-        }
-      
-        //initialize
-        element.selectize(config);
-        selectize = element[0].selectize;
-
-        //event handlers
-        selectize.on('change', refreshAngularItems);
-        selectize.on('option_add', refreshAngularOptions);
-        ngModel.$render = refreshSelectize;
-      },0)
+      selectize.on('option_add', refreshAngularOptions);
+      scope.$watch(function(){ return ngModel.$modelValue }, refreshSelectize, true);
       
     }
   };
