@@ -38,7 +38,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
     
       function createOptions(input){
         if($.isArray(input)){
-          for(var i = 0, opt; opt = input[i++];){
+          for(var i = 0; i < input.length; i++){
             createOptions(input);
           }
         }
