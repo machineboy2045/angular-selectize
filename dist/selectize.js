@@ -55,10 +55,15 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           selectize.setValue(value); 
         });
       }
+
+      function toggle(disable){
+        disable ? selectize.disable() : selectize.enable();
+      }
       
       selectize.on('option_add', refreshAngularOptions);
       scope.$watch(function(){ return ngModel.$modelValue }, refreshSelectize, true);
-      
+      scope.$watch(function(){ return attrs.disabled }, toggle, true);
+
     }
   };
 }]);
