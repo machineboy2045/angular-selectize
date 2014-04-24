@@ -11,6 +11,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
     link: function(scope, element, attrs, ngModel) {
       var config;
       var selectize;
+      var prevNgClasses = '';
       
       //config
       config = scope.$eval(attrs.selectize);
@@ -41,38 +42,40 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           for(var i = 0; i < input.length; i++){
             createOptions(input[i]);
           }
+        }else{
+          var newOpt = {};
+          newOpt[selectize.settings.valueField] = input;
+          newOpt[selectize.settings.labelField] = input;
+          selectize.addOption(newOpt);
         }
-        var newOpt = {};
-        newOpt[selectize.settings.valueField] = input;
-        newOpt[selectize.settings.labelField] = input;
-        selectize.addOption(newOpt);
       }
       
-      function updateClass(){
-        if( ngModel.$invalid ){
-          selectize.$control.addClass('ng-invalid')
-        }else{
-          selectize.$control.removeClass('ng-invalid')
+      function updateClasses(){
+        var ngClasses = element.prop('class').match(/ng-[a-z-]+/g).join(' ');
+
+        if(ngClasses != prevNgClasses){
+          var selectizeClasses = selectize.$control.prop('class').replace(/ng-[a-z-]+/g, '');
+          prevNgClasses = ngClasses;
+          selectize.$control.prop('class', selectizeClasses+' '+ngClasses);
         }
       }
       
       function refreshSelectize(value){
         $timeout(function(){
-          updateClass();
           createOptions(value);
           selectize.refreshOptions(false);
+          refreshAngularOptions();
           selectize.setValue(value); 
+          updateClasses(); 
         });
       }
 
-      function toggle(disable){
-        disable ? selectize.disable() : selectize.enable();
+      function toggle(disabled){
+        disabled ? selectize.disable() : selectize.enable();
       }
-      
 
-      selectize.on('option_add', refreshAngularOptions);
       scope.$watch(function(){ return ngModel.$modelValue }, refreshSelectize, true);
-      scope.$watch(function(){ return attrs.disabled }, toggle, true);
+      attrs.$observe('disabled', toggle);
 
     }
   };
