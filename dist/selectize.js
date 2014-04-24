@@ -16,7 +16,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       //config
       config = scope.$eval(attrs.selectize);
       config.options = scope.$eval(attrs.options) || [];
-      if(selectizeConfig){
+      if(typeof selectizeConfig !== 'undefined'){
         config = angular.extend(config, selectizeConfig);
       }
       config.maxItems = config.maxItems || null; //default to tag editor
@@ -28,26 +28,23 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         })
         config.sortField = config.sortField || 'id'; //preserve order
       }
+      
+      config.create = function(input) {
+        var data = {};
+        data[selectize.settings.labelField] = input;
+        data[selectize.settings.valueField] = input;
+        return data;
+      };
     
       //init
       element.selectize(config);
       selectize = element[0].selectize;
       
-      function refreshAngularOptions(value, data) {
-        config.options = selectize.options;
-      }
-    
-      function createOptions(input){
-        if($.isArray(input)){
-          for(var i = 0; i < input.length; i++){
-            createOptions(input[i]);
-          }
-        }else{
-          var newOpt = {};
-          newOpt[selectize.settings.valueField] = input;
-          newOpt[selectize.settings.labelField] = input;
-          selectize.addOption(newOpt);
-        }
+      function addAngularOption(value, data) {
+        $timeout(function(){
+          if(config.options.length != selectize.currentResults.total)
+          config.options.push(data);
+        });
       }
       
       function updateClasses(){
@@ -60,13 +57,21 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         }
       }
       
+      function refreshItem(val){
+        if(!selectize.userOptions[val]){
+          selectize.addOption( selectize.settings.create(val) );
+        }
+      }
+      
       function refreshSelectize(value){
         $timeout(function(){
-          createOptions(value);
-          selectize.refreshOptions(false);
-          refreshAngularOptions();
-          selectize.setValue(value); 
-          updateClasses(); 
+          if(angular.isArray(value)){
+            angular.forEach(value, refreshItem);
+          }else{
+            refreshItem(value);
+          }
+          selectize.setValue(value);
+          updateClasses();
         });
       }
 
@@ -74,6 +79,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         disabled ? selectize.disable() : selectize.enable();
       }
 
+      selectize.on('option_add', addAngularOption);
       scope.$watch(function(){ return ngModel.$modelValue }, refreshSelectize, true);
       attrs.$observe('disabled', toggle);
 
