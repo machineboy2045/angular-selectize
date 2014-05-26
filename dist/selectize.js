@@ -29,12 +29,14 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         config.sortField = config.sortField || 'id'; //preserve order
       }
       
-      config.create = function(input) {
-        var data = {};
-        data[selectize.settings.labelField] = input;
-        data[selectize.settings.valueField] = input;
-        return data;
-      };
+      if(config.create){
+        config.create = function(input) {
+          var data = {};
+          data[selectize.settings.labelField] = input;
+          data[selectize.settings.valueField] = input;
+          return data;
+        };
+      }
     
       //init
       element.selectize(config);
@@ -58,7 +60,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       }
       
       function refreshItem(val){
-        if(!selectize.userOptions[val]){
+        if(!selectize.userOptions[val] && selectize.settings.create){
           selectize.addOption( selectize.settings.create(val) );
         }
       }
