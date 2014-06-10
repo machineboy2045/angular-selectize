@@ -12,6 +12,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       var config;
       var selectize;
       var prevNgClasses = '';
+      var refreshSelectizeTimeout;
       
       //config
       config = scope.$eval(attrs.selectize);
@@ -66,7 +67,8 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       }
       
       function refreshSelectize(value){
-        $timeout(function(){
+        $timeout.cancel(refreshSelectizeTimeout);
+        refreshSelectizeTimeout = $timeout(function(){
           if(angular.isArray(value)){
             angular.forEach(value, refreshItem);
           }else{
@@ -82,7 +84,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       }
 
       selectize.on('option_add', addAngularOption);
-      scope.$watch(function(){ return ngModel.$modelValue }, refreshSelectize, true);
+      scope.$watchCollection(function(){ return ngModel.$modelValue }, refreshSelectize);
       attrs.$observe('disabled', toggle);
 
     }
