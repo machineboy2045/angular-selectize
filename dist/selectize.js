@@ -8,48 +8,52 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
   return {
     restrict: 'A',
     require: '^ngModel',
+    template: '<select><option></option></select>',
+    transclude: true,
     link: function(scope, element, attrs, ngModel) {
       var config;
       var selectize;
       var prevNgClasses = '';
       var refreshSelectizeTimeout;
-      
-      //config
-      config = scope.$eval(attrs.selectize);
-      config.options = scope.$eval(attrs.options) || [];
-      if(typeof selectizeConfig !== 'undefined'){
-        config = angular.extend(config, selectizeConfig);
+
+      function parseConfig(){
+        config = scope.$eval(attrs.selectize);
+        config.options = scope.$eval(attrs.options) || [];
+
+        if (typeof selectizeConfig !== 'undefined') {
+          config = angular.extend(config, selectizeConfig);
+        }
+        config.maxItems = config.maxItems || null; //default to tag editor
+
+        //support simple arrays
+        if (config.options && typeof config.options[0] === 'string') {
+          config.options = $.map(config.options, function(opt, index) {
+            return {
+              id: index,
+              text: opt,
+              value: opt
+            };
+          })
+          config.sortField = config.sortField || 'id'; //preserve order
+        }
+
+        if (config.create) {
+          config.create = function(input) {
+            var data = {};
+            data[selectize.settings.labelField] = input;
+            data[selectize.settings.valueField] = input;
+            return data;
+          };
+        }
       }
-      config.maxItems = config.maxItems || null; //default to tag editor
-      
-      //support simple arrays
-      if(config.options && typeof config.options[0] === 'string'){
-        config.options = $.map(config.options, function(opt, index){
-          return {id:index, text:opt, value:opt};
-        })
-        config.sortField = config.sortField || 'id'; //preserve order
-      }
-      
-      if(config.create){
-        config.create = function(input) {
-          var data = {};
-          data[selectize.settings.labelField] = input;
-          data[selectize.settings.valueField] = input;
-          return data;
-        };
-      }
-    
-      //init
-      element.selectize(config);
-      selectize = element[0].selectize;
-      
+
       function addAngularOption(value, data) {
         $timeout(function(){
           if(config.options.length != selectize.currentResults.total)
           config.options.push(data);
         });
       }
-      
+
       function updateClasses(){
         var ngClasses = element.prop('class').match(/ng-[a-z-]+/g).join(' ');
 
@@ -59,13 +63,13 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           selectize.$control.prop('class', selectizeClasses+' '+ngClasses);
         }
       }
-      
+
       function refreshItem(val){
         if(!selectize.userOptions[val] && selectize.settings.create){
           selectize.addOption( selectize.settings.create(val) );
         }
       }
-      
+
       function refreshSelectize(value){
         $timeout.cancel(refreshSelectizeTimeout);
         refreshSelectizeTimeout = $timeout(function(){
@@ -83,9 +87,18 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         disabled ? selectize.disable() : selectize.enable();
       }
 
-      selectize.on('option_add', addAngularOption);
-      scope.$watchCollection(function(){ return ngModel.$modelValue }, refreshSelectize);
-      attrs.$observe('disabled', toggle);
+      //init
+      $timeout(function(){
+
+        parseConfig();
+        element.selectize(config);
+        selectize = element[0].selectize;
+
+        selectize.on('option_add', addAngularOption);
+        scope.$watch(function() {return ngModel.$modelValue }, refreshSelectize, true);
+        attrs.$observe('disabled', toggle);
+
+      });
 
     }
   };
