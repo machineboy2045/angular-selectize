@@ -95,7 +95,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         selectize = element[0].selectize;
 
         selectize.on('option_add', addAngularOption);
-        scope.$watch(function() {return ngModel.$modelValue }, refreshSelectize, true);
+        scope.$watchCollection(function() {return ngModel.$modelValue }, refreshSelectize);
         attrs.$observe('disabled', toggle);
 
       });
