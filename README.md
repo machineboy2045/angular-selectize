@@ -1,9 +1,11 @@
 angular-selectize2
 ==================
-This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http://brianreavis.github.io/selectize.js/). It supports 2-way model binding, ng-required, and 2-way binding of the options. 
+This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http://brianreavis.github.io/selectize.js/). It supports 2-way model binding, ng-required, and 2-way binding of the options.
 
 I decided to adapt Selectize for Angular after being disatisfied with the performance of ui-select2 when there were many options on the page.
 
+**NOTE:** Upgrading from 0.3.x to 0.4.x
+Add the directive to `<div>` or `<input>` elements instead of `<select>`
 
 ##Demo
 [Try the Plunker here](http://plnkr.co/edit/4J6IUj?p=info)
@@ -63,7 +65,7 @@ $scope.config = {
 Add the select element to your view template:
 
 ```html
-<select selectize="config" options='myOptions' ng-model="myModel"></select>
+<div selectize="config" options='myOptions' ng-model="myModel"></div>
 ```
 
 ##Config
@@ -87,7 +89,7 @@ $scope.config = {
 ### Inline Config
 
 ```html
-<select selectize="{create:true, maxItems:10}" options='myOptions' ng-model="myModel"></select>
+<div selectize="{create:true, maxItems:10}" options='myOptions' ng-model="myModel"></div>
 ```
 
 ### Tag editor

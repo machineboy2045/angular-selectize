@@ -9,7 +9,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
     restrict: 'A',
     require: '^ngModel',
     template: '<select><option></option></select>',
-    transclude: true,
+    replace: true,
     link: function(scope, element, attrs, ngModel) {
       var config;
       var selectize;
