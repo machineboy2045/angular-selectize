@@ -17,8 +17,6 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       var refreshSelectizeTimeout;
 
       function parseConfig(){
-        element.attr('placeholder', attrs.placeholder);
-
         config = scope.$eval(attrs.selectize);
         config.options = scope.$eval(attrs.options) || [];
 
