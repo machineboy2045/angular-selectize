@@ -1,6 +1,9 @@
 {
   "name": "angular-selectize2",
   "version": "0.4.3",
+  "main" : [
+    "./dist/selectize.js"
+  ],
   "dependencies": {
     "selectize": "~0.9.0"
   }
