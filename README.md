@@ -65,7 +65,7 @@ $scope.config = {
 Add the select element to your view template:
 
 ```html
-<div selectize="config" options='myOptions' ng-model="myModel"></div>
+<div selectize="config" options='myOptions' placeholder='Pick some...' ng-model="myModel"></div>
 ```
 
 ##Config
@@ -89,7 +89,7 @@ $scope.config = {
 ### Inline Config
 
 ```html
-<div selectize="{create:true, maxItems:10}" options='myOptions' ng-model="myModel"></div>
+<div selectize="{create:true, maxItems:10}" options='myOptions' placeholder='Pick some...' ng-model="myModel"></div>
 ```
 
 ### Tag editor
