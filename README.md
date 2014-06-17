@@ -16,7 +16,7 @@ Add the directive to `<div>` or `<input>` elements instead of `<select>`
 - [JQuery](http://jquery.com/)
 - [Selectize](http://brianreavis.github.io/selectize.js/)
 
-## Usage
+## Install
 
 We use [bower](https://github.com/bower/bower) for dependency management. Install Angular-selectize into your project by running the command
 
@@ -41,7 +41,7 @@ Add the selectize module as a dependency to your application module:
 ```javascript
 var myAppModule = angular.module('MyApp', ['selectize']);
 ```
-
+## Usage
 Setup your controller variables:
 
 ```javascript
