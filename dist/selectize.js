@@ -88,7 +88,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       }
 
       //init
-      $timeout(function(){
+      scope.$evalAsync(function(){
 
         parseConfig();
         element.selectize(config);
