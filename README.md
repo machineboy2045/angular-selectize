@@ -4,8 +4,8 @@ This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http
 
 I decided to adapt Selectize for Angular after being disatisfied with the performance of ui-select2 when there were many options on the page.
 
-**NOTE:** Upgrading from 0.3.x to 0.4.x
-Add the directive to `<div>` or `<input>` elements instead of `<select>`
+##Please Note!
+Add the directive to `<div>` elements. It will not work with `<select>` because of conflicts with ngOptions.
 
 ##Demo
 [Try the Plunker here](http://plnkr.co/edit/4J6IUj?p=preview)
