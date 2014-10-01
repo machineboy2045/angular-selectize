@@ -5,7 +5,7 @@
 
 angular.module('selectize', []).value('selectizeConfig', {}).directive("selectize", ['selectizeConfig', '$timeout', function(selectizeConfig, $timeout) {
 
-  return {
+    return {
     restrict: 'A',
     template: '<select><option></option></select>',
     replace: true,
@@ -78,13 +78,14 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       }
 
 
-      function updateAngularValue(value){
+      function updateAngularValue(val){
         scope.$evalAsync(function(){
-          scope.ngModel = value;
+          scope.ngModel = val;
         })
       }
 
       function updateSelectizeValue(curr, prev){
+        if(curr === prev) return;
         //use timeout to wait in case options are being added
         $timeout(function(){
           selectize.setValue(curr);
@@ -96,14 +97,15 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       parseConfig();
       element.selectize(config);
       selectize = element[0].selectize;
+      selectize.setValue(scope.ngModel);
 
       selectize.on('option_add', addAngularOption);
       selectize.on('change', updateAngularValue)
 
-
-      scope.$watchCollection('ngModel', updateSelectizeValue);
+      scope.$watch('ngModel', updateSelectizeValue, true);
       scope.$watchCollection('options', addSelectizeOptions);
       scope.$watch('ngDisabled', toggle);
+
 
     }
   };
