@@ -3,22 +3,17 @@
  * https://github.com/machineboy2045/angular-selectize
  **/
 
-angular.module('selectize', []).value('selectizeConfig', {}).directive("selectize", ['selectizeConfig', '$timeout', function(selectizeConfig, $timeout) {
-
-    return {
-    restrict: 'A',
-    template: '<select><option></option></select>',
-    replace: true,
+angular.module('selectize', []).value('selectizeConfig', {}).directive("selectize", ['selectizeConfig', function(selectizeConfig) {
+  return {
+    restrict: 'EA',
+    require: '^ngModel',
     scope: {ngModel: '=', config: '=selectize', options: '=', ngDisabled: '='},
-    link: function(scope, element, attrs) {
+    link: function(scope, element, attrs, modelCtrl) {
       var config = angular.copy(scope.config);
       var selectize;
-      var prevNgClasses = '';
-
 
       function parseConfig(){
         config.options = scope.options || [];
-
 
         if (typeof selectizeConfig !== 'undefined') {
           var defaultConfig = angular.copy(selectizeConfig);
@@ -39,17 +34,6 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         }
       }
 
-
-      function updateClasses(){
-        var ngClasses = element.prop('class').match(/ng-[a-z-]+/g).join(' ');
-
-        if(ngClasses != prevNgClasses){
-          var selectizeClasses = selectize.$control.prop('class').replace(/ng-[a-z-]+/g, '');
-          prevNgClasses = ngClasses;
-          selectize.$control.prop('class', selectizeClasses+' '+ngClasses);
-        }
-      }
-
       function addAngularOption(value, data) {
         scope.$evalAsync(function(){
           if(selectize.currentResults && (scope.options.length < selectize.currentResults.total)){
@@ -59,38 +43,103 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
       }
 
-
-      function addSelectizeOptions(value, prev){
-        if(!config.create && !config.preload){
-          return;
-        }
-        if(angular.isArray(value)){
-          angular.forEach(value, function(val){
-            selectize.addOption(val);
-          });
-        }else{
-          selectize.addOption(value);
-        }
+      function createItem(input) {
+        var data = {};
+        data[selectize.settings.labelField] = input;
+        data[selectize.settings.valueField] = input;
+        return data;
       }
 
       function toggle(disabled){
         disabled ? selectize.disable() : selectize.enable();
       }
 
-
-      function updateAngularValue(val){
-        scope.$evalAsync(function(){
-          scope.ngModel = val;
-        })
+      function setDirty(){
+        modelCtrl.$setViewValue(modelCtrl.$modelValue);
       }
 
-      function updateSelectizeValue(curr, prev){
-        if(curr === prev) return;
-        //use timeout to wait in case options are being added
-        $timeout(function(){
-          selectize.setValue(curr);
-          updateClasses();
-        })
+      function updateClasses(){
+        selectize.$control.toggleClass('ng-invalid', modelCtrl.$invalid)
+      }
+
+      function updateValidity(){
+        modelCtrl.$setValidity('required', !config.required || scope.ngModel.length)
+        updateClasses();
+      }
+
+      function getValue(){
+        if(selectize.settings.maxItems === 1)
+          return selectize.items.join(selectize.settings.delimiter);
+        else
+          return selectize.items;
+      }
+
+      function updateAngularValue(val){
+        if(val ===  scope.ngModel)
+          return false;
+        else
+          setDirty();
+
+
+        scope.$evalAsync(function(){
+          scope.ngModel = getValue();
+          updateValidity();
+        });
+      }
+
+      function updateSelectizeOptions(value, prev){
+        if( value === prev ) return;
+
+        var needOptionRefresh = false;
+
+        value = angular.isArray(value) ? value : [value]
+
+        angular.forEach(value, function(item){
+          var value = item[selectize.settings.valueField];
+          if(!selectize.options[value]){
+            selectize.addOption(item);
+            needOptionRefresh = true;
+          }
+        });
+
+        if(needOptionRefresh)
+          selectize.refreshOptions(false);
+      }
+
+      function updateSelectizeValue(value, prev){
+        var needOptionRefresh = false;
+
+
+        if(value === prev) return;
+
+        selectize.clear();
+
+
+        if(!value || !value.length)
+          return updateValidity();
+
+
+        value = angular.isArray(value) ? value : [value]
+
+
+        angular.forEach(value, function(val){
+
+          if(selectize.settings.create){
+            var item = createItem(val)
+            if(!selectize.options[val]){
+              selectize.addOption(item);
+              needOptionRefresh = true;
+            }
+          }
+
+
+          selectize.addItem(val);
+        });
+
+        if(needOptionRefresh)
+          selectize.refreshOptions(false);
+
+        updateValidity();
 
       }
 
@@ -100,13 +149,11 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       selectize.setValue(scope.ngModel);
 
       selectize.on('option_add', addAngularOption);
-      selectize.on('change', updateAngularValue)
+      selectize.on('change', updateAngularValue);
 
+      scope.$watchCollection('options', updateSelectizeOptions);
       scope.$watch('ngModel', updateSelectizeValue, true);
-      scope.$watchCollection('options', addSelectizeOptions);
       scope.$watch('ngDisabled', toggle);
-
-
     }
   };
 }]);
