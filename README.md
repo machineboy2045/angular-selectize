@@ -8,7 +8,7 @@ I decided to adapt Selectize for Angular after being disatisfied with the perfor
 Add the directive to `<div>` elements. It will not work with `<select>` because of conflicts with ngOptions.
 
 ##Demo
-[Try the Plunker here](http://plnkr.co/edit/4J6IUj?p=preview)
+[Try the Plunker here](http://plnkr.co/edit/pc3eT8?p=preview)
 
 ## Requirements
 
