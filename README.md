@@ -28,9 +28,9 @@ This will copy the angular-selectize2 files into your `bower_components` folder,
 ```html
 <link rel="stylesheet" href="bower_components/selectize/dist/css/selectize.default.css ">
 <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
-<script type="text/javascript" src="bower_components/selectize/dist/js/standalone/selectize.min.js.js"></script>
+<script type="text/javascript" src="bower_components/selectize/dist/js/standalone/selectize.min.js"></script>
 <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-<script type="text/javascript" src="bower_components/angular-selectize/dist/selectize.js"></script>
+<script type="text/javascript" src="bower_components/angular-selectize2/dist/selectize.js"></script>
 ```
 
 (Note that `jquery` must be loaded before `angular` so that it doesn't use `jqLite` internally)
