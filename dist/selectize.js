@@ -61,7 +61,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
 
       function addSelectizeOptions(value, prev){
-        if(!config.create){
+        if(!config.create && !config.preload){
           return;
         }
         if(angular.isArray(value)){
