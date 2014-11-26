@@ -9,15 +9,14 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
     require: '^ngModel',
     scope: {ngModel: '=', config: '=selectize', options: '=', ngDisabled: '='},
     link: function(scope, element, attrs, modelCtrl) {
-      var config = angular.copy(scope.config);
+      var config = angular.copy(selectizeConfig);
       var selectize;
 
-      function parseConfig(){
+      function parseConfig() {
         config.options = scope.options || [];
 
-        if (typeof selectizeConfig !== 'undefined') {
-          var defaultConfig = angular.copy(selectizeConfig);
-          config = angular.extend(defaultConfig, config);
+        if (typeof scope.config !== 'undefined') {
+          config = angular.extend(config, scope.config);
         }
         config.maxItems = config.maxItems || null; //default to tag editor
 
