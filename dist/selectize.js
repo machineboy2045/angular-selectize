@@ -153,6 +153,15 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       scope.$watchCollection('options', updateSelectizeOptions);
       scope.$watch('ngModel', updateSelectizeValue, true);
       scope.$watch('ngDisabled', toggle);
+
+      element.on('$destroy', function() {
+          if (selectize) {
+              selectize.destroy();
+              element = null;
+          }
+      });
+
+
     }
   };
 }]);
