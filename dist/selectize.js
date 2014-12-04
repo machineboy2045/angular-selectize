@@ -62,7 +62,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       }
 
       function updateValidity(){
-        modelCtrl.$setValidity('required', !config.required || scope.ngModel.length)
+        modelCtrl.$setValidity('required', !config.required || scope.ngModel.length !== 0 ? true : false)
         updateClasses();
       }
 
