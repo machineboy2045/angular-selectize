@@ -54,7 +54,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       }
 
       function setDirty(){
-        modelCtrl.$setViewValue(modelCtrl.$modelValue);
+        modelCtrl.$setViewValue(angular.copy(modelCtrl.$modelValue));
       }
 
       function updateClasses(){
