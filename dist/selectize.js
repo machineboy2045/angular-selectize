@@ -102,7 +102,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         });
 
         if(needOptionRefresh)
-          selectize.refreshOptions(false);
+          updateSelectizeValue(scope.ngModel); //allow the model value to be set before the options are loaded
       }
 
       function updateSelectizeValue(value, prev){
