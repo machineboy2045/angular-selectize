@@ -82,8 +82,13 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
         value = angular.isArray(value) ? value : [value]
 
-        angular.forEach(value, function(item){
+        var i = 0
+    	angular.forEach(value, function(item){
+          i++;
           var value = item[selectize.settings.valueField];
+          if (typeof item === 'string') {
+              item = {id: i,text: item, value: item};
+          }
           if(!selectize.options[value]){
             selectize.addOption(item);
             needOptionRefresh = true;
