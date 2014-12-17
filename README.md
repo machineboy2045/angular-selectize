@@ -75,17 +75,6 @@ Theoretically, all of the config options from the original selectize should work
 - [Selectize config options](https://github.com/brianreavis/selectize.js/blob/master/docs/usage.md)
 - [Selectize API](https://github.com/brianreavis/selectize.js/blob/master/docs/api.md)
 
-### Simple select
-
-```javascript
-$scope.myModel = 'red';
-
-$scope.myOptions = ['red','yellow','black','white'];
-
-$scope.config = {
-  maxItems: 1
-}
-```
 
 ### Inline Config
 
