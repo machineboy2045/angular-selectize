@@ -12,26 +12,13 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       var config = angular.copy(selectizeConfig);
       var selectize;
 
-      function parseConfig() {
-        config.options = scope.options || [];
+      config.options = scope.options || [];
 
-        if (typeof scope.config !== 'undefined') {
-          config = angular.extend(config, scope.config);
-        }
-        config.maxItems = config.maxItems || null; //default to tag editor
-
-        //support simple arrays
-        if (config.options && typeof config.options[0] === 'string') {
-          config.options = $.map(config.options, function(opt, index) {
-            return {
-              id: index,
-              text: opt,
-              value: opt
-            };
-          })
-          config.sortField = config.sortField || 'id'; //preserve order
-        }
+      if (typeof scope.config !== 'undefined') {
+        config = angular.extend(config, scope.config);
       }
+      
+      config.maxItems = config.maxItems || null; //default to tag editor
 
       function addAngularOption(value, data) {
         scope.$evalAsync(function(){
@@ -46,6 +33,8 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         var data = {};
         data[selectize.settings.labelField] = input;
         data[selectize.settings.valueField] = input;
+        data[selectize.settings.searchField] = input;
+        data[selectize.settings.sortField] = input;
         return data;
       }
 
@@ -142,13 +131,14 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
       }
 
-      parseConfig();
       element.selectize(config);
       selectize = element[0].selectize;
-      selectize.setValue(scope.ngModel);
 
       selectize.on('option_add', addAngularOption);
       selectize.on('change', updateAngularValue);
+      
+      //initialize with ngModel
+      updateSelectizeValue(scope.ngModel);
 
       scope.$watchCollection('options', updateSelectizeOptions);
       scope.$watch('ngModel', updateSelectizeValue, true);
