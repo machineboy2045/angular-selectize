@@ -2,6 +2,8 @@ angular-selectize
 ==================
 This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http://brianreavis.github.io/selectize.js/).
 
+![selectize](https://cloud.githubusercontent.com/assets/4087667/5509244/dc6c4526-876a-11e4-8bf2-0edf33091147.png)
+
 ##Please Note!
 Add the directive to `<div>` elements. It will not work with `<select>` because of conflicts with ngOptions.
 
