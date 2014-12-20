@@ -8,7 +8,7 @@ This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http
 Add the directive to `<div>` elements. It will not work with `<select>` because of conflicts with ngOptions.
 
 ##Demos & Examples
-[Try the Plunker here](http://plnkr.co/edit/pc3eT8?p=preview)
+[Try the Plunker here](http://plnkr.co/edit/X2YYPX?p=preview)
 
 ## Requirements
 
