@@ -6,7 +6,7 @@
 angular.module('selectize', []).value('selectizeConfig', {}).directive("selectize", ['selectizeConfig', function(selectizeConfig) {
   return {
     restrict: 'EA',
-    require: 'ngModel',
+    require: '^ngModel',
     scope: {ngModel: '=', config: '=selectize', options: '=?', ngDisabled: '='},
     link: function(scope, element, attrs, modelCtrl) {
       
@@ -30,19 +30,21 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         disabled ? selectize.disable() : selectize.enable();
       }
       
-      modelCtrl.$validators.required = function(modelValue, viewValue) {
-        if(!config.required)
-          return true;
-          
-        return !modelCtrl.$isEmpty(modelValue);
+      var validate = function() {
+        var isInvalid = config.required && modelCtrl.$isEmpty(scope.ngModel);
+        modelCtrl.$setValidity('required', !isInvalid)
       };
 
       config.onChange = function(){
         if( !angular.equals(selectize.items, scope.ngModel) )
-          modelCtrl.$setViewValue( angular.copy(selectize.items) );
+          scope.$evalAsync(function(){
+            modelCtrl.$setViewValue( angular.copy(selectize.items) );
+          });
       }
       
       function updateSelectize(){
+        validate();
+        
         selectize.$control.toggleClass('ng-valid', modelCtrl.$valid)
         selectize.$control.toggleClass('ng-invalid', modelCtrl.$invalid)
         selectize.$control.toggleClass('ng-dirty', modelCtrl.$dirty)
