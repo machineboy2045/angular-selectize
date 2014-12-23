@@ -1,118 +1,98 @@
-var app = angular.module('plunker', ['selectize']);
+/**
+ * Angular Selectize2
+ * https://github.com/machineboy2045/angular-selectize
+ **/
 
-app.controller('MainCtrl', function($scope, $timeout) {
-  $scope.disable = false;
-  //=======================================================
-  //tagging
-  //=======================================================
-  $scope.tags = ['Awesome', 'Neat'];
-  
-  $scope.tagsConfig = {
-    delimiter: ',',
-    persist: false,
-    create: function(input) {
-        return {
-            value: input,
-            text: input
+angular.module('selectize', []).value('selectizeConfig', {}).directive("selectize", ['selectizeConfig', function(selectizeConfig) {
+  return {
+    restrict: 'EA',
+    require: '^ngModel',
+    scope: {ngModel: '=', config: '=selectize', options: '=?', ngDisabled: '='},
+    link: function(scope, element, attrs, modelCtrl) {
+
+      Selectize.defaults.maxItems = null; //default to tag editor
+
+      var selectize,
+          config = angular.extend({}, Selectize.defaults, selectizeConfig, scope.config);
+
+      modelCtrl.$isEmpty = function(val){
+        return (val === undefined || val === null || !val.length); //override to support checking empty arrays
+      }
+
+      function createItem(input) {
+        var data = {};
+        data[config.labelField] = input;
+        data[config.valueField] = input;
+        return data;
+      }
+
+      function toggle(disabled){
+        disabled ? selectize.disable() : selectize.enable();
+      }
+
+      var validate = function() {
+        var isInvalid = config.required && modelCtrl.$isEmpty(scope.ngModel);
+        modelCtrl.$setValidity('required', !isInvalid)
+      };
+
+      config.onChange = function(){
+        if( !angular.equals(selectize.items, scope.ngModel) )
+          scope.$evalAsync(function(){
+            modelCtrl.$setViewValue( angular.copy(selectize.items) );
+          });
+      }
+
+      function generateOptions(data){
+        data = data || [];
+        data = angular.isArray(data) ? data : [data]
+
+        return $.map(data, function(opt){
+          return typeof opt === 'string' ? createItem(opt) : opt;
+        });
+      }
+
+      function updateSelectize(){
+        validate();
+
+        selectize.$control.toggleClass('ng-valid', modelCtrl.$valid)
+        selectize.$control.toggleClass('ng-invalid', modelCtrl.$invalid)
+        selectize.$control.toggleClass('ng-dirty', modelCtrl.$dirty)
+        selectize.$control.toggleClass('ng-pristine', modelCtrl.$pristine)
+
+        if( !angular.equals(selectize.items, scope.ngModel) ){
+          selectize.addOption(generateOptions(scope.ngModel))
+          selectize.setValue(scope.ngModel)
         }
+      }
+
+      config.onOptionAdd = function(value, data) {
+        if( scope.options.indexOf(data) === -1 )
+          scope.options.push(data);
+      }
+
+      // ngModel (ie selected items) is included in this because if no options are specified, we
+      // need to create the corresponding options for the items to be visible
+      scope.options = generateOptions( angular.copy(scope.options || config.options || scope.ngModel) );
+
+      config.onInitialize = function(){
+        selectize = element[0].selectize;
+        selectize.addOption(scope.options)
+        selectize.setValue(scope.ngModel)
+
+        scope.$watchCollection('options', selectize.addOption.bind(selectize));
+        scope.$watch('ngModel', updateSelectize);
+        scope.$watch('ngDisabled', toggle);
+      }
+
+      element.selectize(config);
+
+      element.on('$destroy', function() {
+        if (selectize) {
+          selectize.destroy();
+          element = null;
+        }
+      });
+
     }
-  }
-  
-  //=======================================================
-  //emails
-  //=======================================================
-  $scope.emails; 
-  
-
-  var REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
-                  '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
-  $scope.emailsConfig = {
-    persist: false,
-    maxItems: null,
-    valueField: 'email',
-    labelField: 'name',
-    options: [{email: 'brian@thirdroute.com', name: 'Brian Reavis'},
-        {email: 'nikola@tesla.com', name: 'Nikola Tesla'},
-        {email: 'someone@gmail.com'}],
-    searchField: ['name', 'email'],
-    render: {
-        item: function(item, escape) {
-            return '<div>' +
-                (item.name ? '<span class="name">' + escape(item.name) + '</span>' : '') +
-                (item.email ? '<span class="email">' + escape(item.email) + '</span>' : '') +
-            '</div>';
-        },
-        option: function(item, escape) {
-            var label = item.name || item.email;
-            var caption = item.name ? item.email : null;
-            return '<div>' +
-                '<span class="label">' + escape(label) + '</span>' +
-                (caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
-            '</div>';
-        }
-    },
-    createFilter: function(input) {
-        var match, regex;
-
-        // email@address.com
-        regex = new RegExp('^' + REGEX_EMAIL + '$', 'i');
-        match = input.match(regex);
-        if (match) return !this.options.hasOwnProperty(match[0]);
-
-        // name <email@address.com>
-        regex = new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i');
-        match = input.match(regex);
-        if (match) return !this.options.hasOwnProperty(match[2]);
-
-        return false;
-    },
-    create: function(input) {
-        if ((new RegExp('^' + REGEX_EMAIL + '$', 'i')).test(input)) {
-            return {email: input};
-        }
-        var match = input.match(new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i'));
-        if (match) {
-            return {
-                email : match[2],
-                name  : $.trim(match[1])
-            };
-        }
-        alert('Invalid email address.');
-        return false;
-    }
-  }
-  
-  //=======================================================
-  //Single
-  //=======================================================
-  $scope.single = null;
-  
-  $scope.singleConfig = {
-    options: [{value: 1, text: 'Chuck Testa'}, {value: 2, text:'Nikola Tesla'}],
-    create: true,
-    sortField: 'text',
-    maxItems: 1,
-  }
-  
- 
-  //=======================================================
-  //Angular Bindings
-  //=======================================================
-  $scope.myModel = ['1'];
-  
-  $scope.myOptions = [{value: '1', text: 'Chuck Testa'}, {value: '2', text:'Nikola Tesla'}];
-  
-  $scope.myConfig = {
-    create: true,
-    required: true,
-  }
-  
-  //simulate async option loading
-  $timeout(function(){
-    for(var i = 10; i < 10000; i++){
-      $scope.myOptions.push({value: i, text: 'option'+i})
-    }
-  })
-  
-  
-});
+  };
+}]);
