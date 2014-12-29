@@ -1,6 +1,6 @@
 angular-selectize
 ==================
-This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http://brianreavis.github.io/selectize.js/).
+This is an Angular.js directive for Brian Reavis's [selectize jQuery plugin](http://brianreavis.github.io/selectize.js/).
 
 * Selectize is ~7kb (gzipped)
 * Snappy performance even with 10k+ options (refer to demo)
@@ -11,9 +11,6 @@ This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http
 
 ###[Try the Demos on Plunker](http://plnkr.co/edit/X2YYPX?p=preview)
 
-![selectize](https://cloud.githubusercontent.com/assets/4087667/5509244/dc6c4526-876a-11e4-8bf2-0edf33091147.png)
-
-
 
 
 ## Dependencies
@@ -23,6 +20,7 @@ This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http
 - [Selectize](http://brianreavis.github.io/selectize.js/)
 
 ## Install
+Install with [Bower](http://bower.io)
 
 `$ bower install angular-selectize2`
 
@@ -67,27 +65,26 @@ $scope.config = {
 }
 ```
 
-Add the select element to your view template:
+Add the selectize element to your view template:
 
 ```html
 <div selectize="config" options='myOptions' ng-model="myModel"></div>
 ```
 
-##Config
-Theoretically, all of the config options from the original selectize should work. But I have not been able to test them all.
 
+##Documentation
 - [Selectize config options](https://github.com/brianreavis/selectize.js/blob/master/docs/usage.md)
 - [Selectize API](https://github.com/brianreavis/selectize.js/blob/master/docs/api.md)
 
-
-### Inline Config
+##Config
+####Inline
 
 ```html
 <div selectize="{create:true, maxItems:10}" options='myOptions' ng-model="myModel"></div>
 ```
 
 
-##Global Defaults
+####Global
 To define global defaults, you can configure the `selectize` injectable:
 
 ```javascript
