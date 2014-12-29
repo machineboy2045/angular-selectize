@@ -2,15 +2,20 @@ angular-selectize
 ==================
 This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http://brianreavis.github.io/selectize.js/).
 
+* Selectize is ~7kb (gzipped)
+* Snappy performance even with 10k+ options (refer to demo)
+* Smart Ranking / Multi-Property Searching & Sorting
+* Angular models & bindings
+* Skinnable
+* Keyboard Compatible
+
 ![selectize](https://cloud.githubusercontent.com/assets/4087667/5509244/dc6c4526-876a-11e4-8bf2-0edf33091147.png)
 
-##Please Note!
-Add the directive to `<div>` elements. It will not work with `<select>` because of conflicts with ngOptions.
 
 ##Demos & Examples
 [Try the Plunker here](http://plnkr.co/edit/X2YYPX?p=preview)
 
-## Requirements
+## Dependencies
 
 - [AngularJS](http://angularjs.org/)
 - [JQuery](http://jquery.com/)
@@ -41,6 +46,10 @@ Add the selectize module as a dependency to your application module:
 ```javascript
 var myAppModule = angular.module('MyApp', ['selectize']);
 ```
+
+##Please Note!
+Add the directive to `<div>` elements. It will not work with `<select>` because of conflicts with ngOptions.
+
 ## Usage
 Setup your controller variables:
 
