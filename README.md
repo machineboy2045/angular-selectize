@@ -40,9 +40,6 @@ Add the selectize module as a dependency to your application module:
 var myAppModule = angular.module('MyApp', ['selectize']);
 ```
 
-##Please Note!
-Add the directive to `<div>` elements. It will not work with `<select>` because of conflicts with ngOptions.
-
 ## Usage
 Setup your controller variables:
 
