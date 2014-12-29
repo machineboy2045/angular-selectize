@@ -9,11 +9,12 @@ This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http
 * Skinnable
 * Keyboard Compatible
 
+###[Try the Demos on Plunker](http://plnkr.co/edit/X2YYPX?p=preview)
+
 ![selectize](https://cloud.githubusercontent.com/assets/4087667/5509244/dc6c4526-876a-11e4-8bf2-0edf33091147.png)
 
 
-##Demos & Examples
-[Try the Plunker here](http://plnkr.co/edit/X2YYPX?p=preview)
+
 
 ## Dependencies
 
