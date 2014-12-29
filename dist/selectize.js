@@ -5,9 +5,9 @@
 
 angular.module('selectize', []).value('selectizeConfig', {}).directive("selectize", ['selectizeConfig', function(selectizeConfig) {
   return {
-    restrict: 'EA',
+    restrict: 'E',
     require: '^ngModel',
-    scope: {ngModel: '=', config: '=selectize', options: '=?', ngDisabled: '='},
+    scope: {ngModel: '=', config: '=?', options: '=?', ngDisabled: '='},
     link: function(scope, element, attrs, modelCtrl) {
 
       Selectize.defaults.maxItems = null; //default to tag editor
@@ -35,15 +35,10 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         modelCtrl.$setValidity('required', !isInvalid)
       };
 
-      config.onChange = function(){
-        if( !angular.equals(selectize.items, scope.ngModel) )
-          scope.$evalAsync(function(){
-            modelCtrl.$setViewValue( angular.copy(selectize.items) );
-          });
-      }
-
       function generateOptions(data){
-        data = data || [];
+        if(!data)
+          return [];
+          
         data = angular.isArray(data) ? data : [data]
 
         return $.map(data, function(opt){
@@ -63,6 +58,13 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           selectize.addOption(generateOptions(scope.ngModel))
           selectize.setValue(scope.ngModel)
         }
+      }
+      
+      config.onChange = function(){
+        if( !angular.equals(selectize.items, scope.ngModel) )
+          scope.$evalAsync(function(){
+            modelCtrl.$setViewValue( angular.copy(selectize.items) );
+          });
       }
 
       config.onOptionAdd = function(value, data) {
