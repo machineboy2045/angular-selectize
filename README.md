@@ -24,13 +24,9 @@ This is an Angular.js directive for Brian Reavis's selectize jQuery plugin (http
 
 ## Install
 
-We use [bower](https://github.com/bower/bower) for dependency management. Install Angular-selectize into your project by running the command
-
 `$ bower install angular-selectize2`
 
-If you use a `bower.json` file in your project, you can have Bower save angular-selectize2 as a dependency by passing the `--save` or `--save-dev` flag with the above command.
-
-This will copy the angular-selectize2 files into your `bower_components` folder, along with its dependencies. Load the script files in your application:
+Load the script files in your application:
 ```html
 <link rel="stylesheet" href="bower_components/selectize/dist/css/selectize.default.css ">
 <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
@@ -38,8 +34,6 @@ This will copy the angular-selectize2 files into your `bower_components` folder,
 <script type="text/javascript" src="bower_components/angular/angular.js"></script>
 <script type="text/javascript" src="bower_components/angular-selectize2/dist/selectize.js"></script>
 ```
-
-(Note that `jquery` must be loaded before `angular` so that it doesn't use `jqLite` internally)
 
 
 Add the selectize module as a dependency to your application module:
@@ -92,21 +86,6 @@ Theoretically, all of the config options from the original selectize should work
 <div selectize="{create:true, maxItems:10}" options='myOptions' ng-model="myModel"></div>
 ```
 
-### Tag editor
-
-```javascript
-$scope.myModel = 1;
-
-$scope.myOptions = [
-  {value: 1, text: 'Spectrometer'},
-  {value: 2, text: 'Star Chart'},
-  {value: 3, text: 'Laser Pointer'}
-];
-
-$scope.config = {
-  create: true
-}
-```
 
 ##Global Defaults
 To define global defaults, you can configure the `selectize` injectable:
