@@ -68,7 +68,7 @@ $scope.config = {
 Add the selectize element to your view template:
 
 ```html
-<div selectize="config" options='myOptions' ng-model="myModel"></div>
+<selectize config="config" options='myOptions' ng-model="myModel"></selectize>
 ```
 
 
@@ -80,7 +80,7 @@ Add the selectize element to your view template:
 ####Inline
 
 ```html
-<div selectize="{create:true, maxItems:10}" options='myOptions' ng-model="myModel"></div>
+<selectize config="{create:true, maxItems:10}" options='myOptions' ng-model="myModel"></selectize>
 ```
 
 
