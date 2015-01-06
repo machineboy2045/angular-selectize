@@ -1,6 +1,6 @@
 angular-selectize
 ==================
-![selectize4](https://cloud.githubusercontent.com/assets/4087667/5633610/e0a9a99a-958d-11e4-9375-89e959a52028.png)
+![selectize5](https://cloud.githubusercontent.com/assets/4087667/5633745/2cfeac18-958f-11e4-9e62-6eba90547b4c.png)
 
 ###Demo
 [Try the Demo on Plunker](http://plnkr.co/edit/X2YYPX?p=preview)
