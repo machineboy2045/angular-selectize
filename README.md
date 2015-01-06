@@ -1,5 +1,11 @@
 angular-selectize
 ==================
+![selectize4](https://cloud.githubusercontent.com/assets/4087667/5633610/e0a9a99a-958d-11e4-9375-89e959a52028.png)
+
+###Demo
+[Try the Demo on Plunker](http://plnkr.co/edit/X2YYPX?p=preview)
+
+###Features
 This is an Angular.js directive for Brian Reavis's [selectize jQuery plugin](http://brianreavis.github.io/selectize.js/). It supports all of Selectize's features. Here are some highlights:
 
 * Better performance than UI-Select ([ui-select](http://plnkr.co/edit/pSJNHS?p=preview) vs [angular-selectize](http://plnkr.co/edit/xdyzf9?p=preview))
@@ -9,7 +15,7 @@ This is an Angular.js directive for Brian Reavis's [selectize jQuery plugin](htt
 * Skinnable
 * Keyboard support
 
-###[Try the Demos on Plunker](http://plnkr.co/edit/X2YYPX?p=preview)
+
 
 
 
