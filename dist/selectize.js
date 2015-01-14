@@ -63,7 +63,11 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       config.onChange = function(){
         if( !angular.equals(selectize.items, scope.ngModel) )
           scope.$evalAsync(function(){
-            modelCtrl.$setViewValue( angular.copy(selectize.items) );
+            var value = angular.copy(selectize.items);
+            if (config.maxItems && config.maxItems == 1) {
+              value = value[0]
+            }
+            modelCtrl.$setViewValue( value );
           });
       }
 
