@@ -64,7 +64,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         if( !angular.equals(selectize.items, scope.ngModel) )
           scope.$evalAsync(function(){
             var value = angular.copy(selectize.items);
-            if (config.maxItems && config.maxItems == 1) {
+            if (config.maxItems == 1) {
               value = value[0]
             }
             modelCtrl.$setViewValue( value );
@@ -79,11 +79,19 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       // ngModel (ie selected items) is included in this because if no options are specified, we
       // need to create the corresponding options for the items to be visible
       scope.options = generateOptions( angular.copy(scope.options || config.options || scope.ngModel) );
+      
+      var angularCallback = config.onInitialize;
 
       config.onInitialize = function(){
         selectize = element[0].selectize;
         selectize.addOption(scope.options)
         selectize.setValue(scope.ngModel)
+        
+        //provides a way to access the selectize element from an
+        //angular controller
+        if(angularCallback){
+          angularCallback(selectize);
+        }
 
         scope.$watchCollection('options', selectize.addOption.bind(selectize));
         scope.$watch('ngModel', updateSelectize);
