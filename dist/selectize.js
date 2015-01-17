@@ -59,6 +59,25 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           selectize.setValue(scope.ngModel)
         }
       }
+
+      function search(array, key, val){
+          for (var i=0; i < array.length; i++) {
+              if (array[i][key] === val) {
+                  return array[i];
+              }
+          }
+      }
+
+      function refresh(data) {
+        selectize.addOption.bind(selectize)(data);
+        if (angular.isArray(scope.ngModel)) {
+          angular.forEach(scope.ngModel, function(value,key) {
+            selectize.updateOption(value,search(scope.options,'id',value));    
+          })
+        } else {
+          selectize.updateOption(scope.ngModel,search(scope.options,'id',scope.ngModel));    
+        }
+      }
       
       config.onChange = function(){
         if( !angular.equals(selectize.items, scope.ngModel) )
@@ -81,7 +100,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         selectize.addOption(scope.options)
         selectize.setValue(scope.ngModel)
 
-        scope.$watchCollection('options', selectize.addOption.bind(selectize));
+        scope.$watchCollection('options', refresh);
         scope.$watch('ngModel', updateSelectize);
         scope.$watch('ngDisabled', toggle);
       }
