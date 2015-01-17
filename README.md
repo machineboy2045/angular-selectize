@@ -63,7 +63,10 @@ $scope.config = {
   valueField: 'id',
   labelField: 'title',
   delimiter: '|',
-  placeholder: 'Pick something'
+  placeholder: 'Pick something',
+  onInitialize: function(selectize){
+    // receives the selectize object as an argument
+  },
   // maxItems: 1
 }
 ```
