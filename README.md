@@ -50,16 +50,8 @@ var myAppModule = angular.module('MyApp', ['selectize']);
 Setup your controller variables:
 
 ```javascript
-$scope.myModel = 1;
-
+$scope.myModel;
 $scope.myOptions = ['Spectrometer', 'Star Chart', 'Laser Pointer'];
-
-$scope.config = {
-  onInitialize: function(selectize){
-    // receives the selectize object as an argument
-  },
-  // maxItems: 1
-}
 ```
 
 Add the selectize element to your view template:
