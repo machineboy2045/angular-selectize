@@ -7,7 +7,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
   return {
     restrict: 'E',
     require: '^ngModel',
-    scope: {ngModel: '=', config: '=?', options: '=?', ngDisabled: '='},
+    scope: {ngModel: '=', config: '=?', options: '=?', ngDisabled: '=', ngRequired: '&'},
     link: function(scope, element, attrs, modelCtrl) {
 
       Selectize.defaults.maxItems = null; //default to tag editor
@@ -31,7 +31,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       }
 
       var validate = function() {
-        var isInvalid = config.required && modelCtrl.$isEmpty(scope.ngModel);
+        var isInvalid = (scope.ngRequired() || attrs.required || config.required) && modelCtrl.$isEmpty(scope.ngModel);
         modelCtrl.$setValidity('required', !isInvalid)
       };
 
