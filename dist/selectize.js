@@ -5,7 +5,7 @@
 
 angular.module('selectize', []).value('selectizeConfig', {}).directive("selectize", ['selectizeConfig', function(selectizeConfig) {
   return {
-    restrict: 'E',
+    restrict: 'EA',
     require: '^ngModel',
     scope: {ngModel: '=', config: '=?', options: '=?', ngDisabled: '=', ngRequired: '&'},
     link: function(scope, element, attrs, modelCtrl) {
