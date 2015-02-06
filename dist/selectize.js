@@ -59,6 +59,9 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           selectize.setValue(scope.ngModel)
         }
       }
+
+      var onChange = config.onChange,
+          onOptionAdd = config.onOptionAdd;
       
       config.onChange = function(){
         if( !angular.equals(selectize.items, scope.ngModel) )
@@ -69,11 +72,19 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
             }
             modelCtrl.$setViewValue( value );
           });
+
+        if (onChange) {
+          onChange.apply(this, arguments);
+        }
       }
 
       config.onOptionAdd = function(value, data) {
         if( scope.options.indexOf(data) === -1 )
           scope.options.push(data);
+
+        if (onOptionAdd) {
+          onOptionAdd.apply(this, arguments);
+        }
       }
 
       // ngModel (ie selected items) is included in this because if no options are specified, we
