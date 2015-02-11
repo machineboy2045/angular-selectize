@@ -104,7 +104,11 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           angularCallback(selectize);
         }
 
-        scope.$watchCollection('options', selectize.addOption.bind(selectize));
+        scope.$watchCollection('options', function(options) {
+          selectize.clearOptions();
+          selectize.addOption(options);
+          selectize.setValue(scope.ngModel);
+        });
         scope.$watch('ngModel', updateSelectize);
         scope.$watch('ngDisabled', toggle);
       }
