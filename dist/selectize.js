@@ -66,7 +66,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       config.onChange = function(){
         if( !angular.equals(selectize.items, scope.ngModel) )
           scope.$evalAsync(function(){
-            var value = angular.copy(selectize.items);
+            var value = selectize.items;
             if (config.maxItems == 1) {
               value = value[0]
             }
@@ -89,7 +89,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
       // ngModel (ie selected items) is included in this because if no options are specified, we
       // need to create the corresponding options for the items to be visible
-      scope.options = generateOptions( angular.copy(scope.options || config.options || scope.ngModel) );
+      scope.options = generateOptions( scope.options || config.options || scope.ngModel);
       
       var angularCallback = config.onInitialize;
 
