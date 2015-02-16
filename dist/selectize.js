@@ -66,7 +66,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       config.onChange = function(){
         if( !angular.equals(selectize.items, scope.ngModel) )
           scope.$evalAsync(function(){
-            var value = angular.copy(selectize.items);
+            var value = selectize.items.slice();
             if (config.maxItems == 1) {
               value = value[0]
             }
@@ -79,6 +79,8 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       }
 
       config.onOptionAdd = function(value, data) {
+        scope.debounceOptionChange = true;
+        
         if( scope.options.indexOf(data) === -1 )
           scope.options.push(data);
 
@@ -89,7 +91,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
       // ngModel (ie selected items) is included in this because if no options are specified, we
       // need to create the corresponding options for the items to be visible
-      scope.options = generateOptions( angular.copy(scope.options || config.options || scope.ngModel) );
+      scope.options = generateOptions( (scope.options || config.options || scope.ngModel).slice() );
       
       var angularCallback = config.onInitialize;
 
@@ -104,7 +106,16 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           angularCallback(selectize);
         }
 
-        scope.$watchCollection('options', selectize.addOption.bind(selectize));
+        scope.$watch('options', function(){
+          if(scope.debounceOptionChange){
+            scope.debounceOptionChange = false; 
+            return;
+          }
+          selectize.clearOptions();
+          selectize.addOption(scope.options)
+          selectize.setValue(scope.ngModel)
+        }, true);
+        
         scope.$watch('ngModel', updateSelectize);
         scope.$watch('ngDisabled', toggle);
       }
