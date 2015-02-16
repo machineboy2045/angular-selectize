@@ -71,7 +71,7 @@ $scope.myOptions = [
   {id: 3, title: 'Laser Pointer'}
 ];
 
-$scope.config = {
+$scope.myConfig = {
   create: true,
   valueField: 'id',
   labelField: 'title',
@@ -81,7 +81,7 @@ $scope.config = {
     // receives the selectize object as an argument
   },
   // maxItems: 1
-}
+};
 ```
 
 
