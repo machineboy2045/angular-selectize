@@ -79,8 +79,6 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       }
 
       config.onOptionAdd = function(value, data) {
-        scope.debounceOptionChange = true;
-        
         if( scope.options.indexOf(data) === -1 )
           scope.options.push(data);
 
@@ -107,10 +105,6 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         }
 
         scope.$watch('options', function(){
-          if(scope.debounceOptionChange){
-            scope.debounceOptionChange = false; 
-            return;
-          }
           selectize.clearOptions();
           selectize.addOption(scope.options)
           selectize.setValue(scope.ngModel)
