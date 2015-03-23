@@ -38,7 +38,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       function generateOptions(data){
         if(!data)
           return [];
-          
+
         data = angular.isArray(data) ? data : [data]
 
         return $.map(data, function(opt){
@@ -60,9 +60,26 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         }
       }
 
-      var onChange = config.onChange,
-          onOptionAdd = config.onOptionAdd;
-      
+
+      var onOptionAdd = config.onOptionAdd;
+      // var onChange = config.onChange;
+
+      // Old Version - ** wasn't working so we replaced it with below
+      // config.onChange = function(){
+      //   if( !angular.equals(selectize.items, scope.ngModel) )
+      //     scope.$evalAsync(function(){
+      //       var value = selectize.items.slice();
+      //       if (config.maxItems == 1) {
+      //         value = value[0]
+      //       }
+      //       modelCtrl.$setViewValue( value );
+      //     });
+
+      //   if (onChange) {
+      //     onChange.apply(this, arguments);
+      //   }
+      // }
+
       config.onChange = function(){
         if( !angular.equals(selectize.items, scope.ngModel) )
           scope.$evalAsync(function(){
@@ -89,15 +106,16 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
       // ngModel (ie selected items) is included in this because if no options are specified, we
       // need to create the corresponding options for the items to be visible
-      scope.options = generateOptions( (scope.options || config.options || scope.ngModel).slice() );
-      
+      // ** was causing problems, so we had to comment this out.
+      // scope.options = generateOptions( (scope.options || config.options || scope.ngModel).slice() );
+
       var angularCallback = config.onInitialize;
 
       config.onInitialize = function(){
         selectize = element[0].selectize;
         selectize.addOption(scope.options)
         selectize.setValue(scope.ngModel)
-        
+
         //provides a way to access the selectize element from an
         //angular controller
         if(angularCallback){
@@ -109,7 +127,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           selectize.addOption(scope.options)
           selectize.setValue(scope.ngModel)
         }, true);
-        
+
         scope.$watchCollection('ngModel', updateSelectize);
         scope.$watch('ngDisabled', toggle);
       }
