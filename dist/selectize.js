@@ -89,13 +89,17 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
       // ngModel (ie selected items) is included in this because if no options are specified, we
       // need to create the corresponding options for the items to be visible
-      scope.options = generateOptions( (scope.options || config.options || scope.ngModel).slice() );
+      scope.generatedOptions = generateOptions( (scope.options || config.options || scope.ngModel).slice() );
+      scope.options.length = 0;
+      scope.generatedOptions.forEach(function (item) {
+        scope.options.push(item);
+      });
       
       var angularCallback = config.onInitialize;
 
       config.onInitialize = function(){
         selectize = element[0].selectize;
-        selectize.addOption(scope.options)
+        selectize.addOption(scope.generatedOptions)
         selectize.setValue(scope.ngModel)
         
         //provides a way to access the selectize element from an
@@ -105,9 +109,14 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         }
 
         scope.$watch('options', function(){
+          scope.generatedOptions = generateOptions( (scope.options || config.options || scope.ngModel).slice() );
+          scope.options.length = 0;
+          scope.generatedOptions.forEach(function (item) {
+            scope.options.push(item);
+          });
           selectize.clearOptions();
-          selectize.addOption(scope.options)
-          selectize.setValue(scope.ngModel)
+          selectize.addOption(scope.generatedOptions);
+          selectize.setValue(scope.ngModel);
         }, true);
         
         scope.$watchCollection('ngModel', updateSelectize);
