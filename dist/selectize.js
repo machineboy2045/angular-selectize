@@ -104,7 +104,16 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           angularCallback(selectize);
         }
 
-        scope.$watch('options', function(){
+        scope.$watch(function(){
+          return scope.options.map(function(r){
+            angular.forEach(r, function(val, key) {
+                if ([config.valueField, config.labelField].indexOf(key) == -1) {
+                    delete r[key];
+                }
+            });
+            return r;
+          });
+        }, function(val){
           selectize.clearOptions();
           selectize.addOption(scope.options)
           selectize.setValue(scope.ngModel)
