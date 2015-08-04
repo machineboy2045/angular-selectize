@@ -91,9 +91,13 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         }
       };
 
-      // ngModel (ie selected items) is included in this because if no options are specified, we
-      // need to create the corresponding options for the items to be visible
-      scope.options = generateOptions(angular.copy(scope.options || config.options || scope.ngModel));
+      if(scope.options){
+        // replace scope options with generated options while retaining a reference to the same array
+        scope.options.splice(0, scope.options.length, generateOptions(scope.options) );
+      }else{
+        // default options = [ngModel] if no options specified
+        scope.options = generateOptions( angular.copy(scope.ngModel) );
+      }
 
       var angularCallback = config.onInitialize;
 
