@@ -64,6 +64,9 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           onOptionAdd = config.onOptionAdd;
 
       config.onChange = function() {
+        if(scope.disableOnChange)
+          return;
+
         if (!angular.equals(selectize.items, scope.ngModel))
           scope.$evalAsync(function() {
             var value = angular.copy(selectize.items);
@@ -106,9 +109,11 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         }
 
         scope.$watch('options', function() {
+          scope.disableOnChange = true;
           selectize.clearOptions();
           selectize.addOption(scope.options);
           selectize.setValue(scope.ngModel);
+          scope.disableOnChange = false;
         }, true);
 
         scope.$watchCollection('ngModel', updateSelectize);
