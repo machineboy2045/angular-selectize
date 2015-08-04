@@ -1,6 +1,6 @@
 {
   "name": "angular-selectize2",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "main" : [
     "./dist/selectize.js"
   ],
