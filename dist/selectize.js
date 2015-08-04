@@ -7,7 +7,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
   return {
     restrict: 'EA',
     require: '^ngModel',
-    scope: {ngModel: '=', config: '=?', options: '=?', ngDisabled: '=', ngRequired: '&'},
+    scope: { ngModel: '=', config: '=?', options: '=?', ngDisabled: '=', ngRequired: '&' },
     link: function(scope, element, attrs, modelCtrl) {
 
       Selectize.defaults.maxItems = null; //default to tag editor
@@ -15,9 +15,9 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       var selectize,
           config = angular.extend({}, Selectize.defaults, selectizeConfig, scope.config);
 
-      modelCtrl.$isEmpty = function(val){
-        return (val === undefined || val === null || !val.length); //override to support checking empty arrays
-      }
+      modelCtrl.$isEmpty = function(val) {
+        return val === undefined || val === null || !val.length; //override to support checking empty arrays
+      };
 
       function createItem(input) {
         var data = {};
@@ -26,47 +26,47 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         return data;
       }
 
-      function toggle(disabled){
+      function toggle(disabled) {
         disabled ? selectize.disable() : selectize.enable();
       }
 
       var validate = function() {
         var isInvalid = (scope.ngRequired() || attrs.required || config.required) && modelCtrl.$isEmpty(scope.ngModel);
-        modelCtrl.$setValidity('required', !isInvalid)
+        modelCtrl.$setValidity('required', !isInvalid);
       };
 
-      function generateOptions(data){
-        if(!data)
+      function generateOptions(data) {
+        if (!data)
           return [];
-          
-        data = angular.isArray(data) ? data : [data]
 
-        return $.map(data, function(opt){
+        data = angular.isArray(data) || angular.isObject(data) ? data : [data]
+
+        return $.map(data, function(opt) {
           return typeof opt === 'string' ? createItem(opt) : opt;
         });
       }
 
-      function updateSelectize(){
+      function updateSelectize() {
         validate();
 
-        selectize.$control.toggleClass('ng-valid', modelCtrl.$valid)
-        selectize.$control.toggleClass('ng-invalid', modelCtrl.$invalid)
-        selectize.$control.toggleClass('ng-dirty', modelCtrl.$dirty)
-        selectize.$control.toggleClass('ng-pristine', modelCtrl.$pristine)
+        selectize.$control.toggleClass('ng-valid', modelCtrl.$valid);
+        selectize.$control.toggleClass('ng-invalid', modelCtrl.$invalid);
+        selectize.$control.toggleClass('ng-dirty', modelCtrl.$dirty);
+        selectize.$control.toggleClass('ng-pristine', modelCtrl.$pristine);
 
-        if( !angular.equals(selectize.items, scope.ngModel) ){
-          selectize.addOption(generateOptions(scope.ngModel))
-          selectize.setValue(scope.ngModel)
+        if (!angular.equals(selectize.items, scope.ngModel)) {
+          selectize.addOption(generateOptions(scope.ngModel));
+          selectize.setValue(scope.ngModel);
         }
       }
 
       var onChange = config.onChange,
           onOptionAdd = config.onOptionAdd;
-      
-      config.onChange = function(){
-        if( !angular.equals(selectize.items, scope.ngModel) )
-          scope.$evalAsync(function(){
-            var value = selectize.items.slice();
+
+      config.onChange = function() {
+        if (!angular.equals(selectize.items, scope.ngModel))
+          scope.$evalAsync(function() {
+            var value = angular.copy(selectize.items);
             if (config.maxItems == 1) {
               value = value[0]
             }
@@ -76,7 +76,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         if (onChange) {
           onChange.apply(this, arguments);
         }
-      }
+      };
 
       config.onOptionAdd = function(value, data) {
         if( scope.options.indexOf(data) === -1 ) {
@@ -86,34 +86,34 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
             onOptionAdd.apply(this, arguments);
           }
         }
-      }
+      };
 
       // ngModel (ie selected items) is included in this because if no options are specified, we
       // need to create the corresponding options for the items to be visible
-      scope.options = generateOptions( (scope.options || config.options || scope.ngModel).slice() );
-      
+      scope.options = generateOptions(angular.copy(scope.options || config.options || scope.ngModel));
+
       var angularCallback = config.onInitialize;
 
-      config.onInitialize = function(){
+      config.onInitialize = function() {
         selectize = element[0].selectize;
-        selectize.addOption(scope.options)
-        selectize.setValue(scope.ngModel)
-        
+        selectize.addOption(scope.options);
+        selectize.setValue(scope.ngModel);
+
         //provides a way to access the selectize element from an
         //angular controller
-        if(angularCallback){
+        if (angularCallback) {
           angularCallback(selectize);
         }
 
-        scope.$watch('options', function(){
+        scope.$watch('options', function() {
           selectize.clearOptions();
-          selectize.addOption(scope.options)
-          selectize.setValue(scope.ngModel)
+          selectize.addOption(scope.options);
+          selectize.setValue(scope.ngModel);
         }, true);
-        
+
         scope.$watchCollection('ngModel', updateSelectize);
         scope.$watch('ngDisabled', toggle);
-      }
+      };
 
       element.selectize(config);
 
@@ -123,7 +123,6 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           element = null;
         }
       });
-
     }
   };
 }]);
