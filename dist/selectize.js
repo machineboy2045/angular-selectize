@@ -35,15 +35,18 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         modelCtrl.$setValidity('required', !isInvalid);
       };
 
-      function generateOptions(data) {
+      function normalizeOptions(data) {
         if (!data)
           return [];
 
         data = angular.isArray(data) || angular.isObject(data) ? data : [data]
 
-        return $.map(data, function(opt) {
-          return typeof opt === 'string' ? createItem(opt) : opt;
+        angular.forEach(data, function(opt, key) {
+            if (typeof opt === 'string') {
+                data[key] = createItem(opt);
+            }
         });
+        return data;
       }
 
       function updateSelectize() {
@@ -55,7 +58,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         selectize.$control.toggleClass('ng-pristine', modelCtrl.$pristine);
 
         if (!angular.equals(selectize.items, scope.ngModel)) {
-          selectize.addOption(generateOptions(scope.ngModel));
+          selectize.addOption(normalizeOptions(angular.copy(scope.ngModel)));
           selectize.setValue(scope.ngModel);
         }
       }
@@ -91,12 +94,12 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         }
       };
 
-      if(scope.options){
-        // replace scope options with generated options while retaining a reference to the same array
-        scope.options.splice(0, scope.options.length, generateOptions(scope.options) );
-      }else{
+      if (scope.options) {
+        // replace string options with generated options while retaining a reference to the same array
+        normalizeOptions(scope.options);
+      } else {
         // default options = [ngModel] if no options specified
-        scope.options = generateOptions( angular.copy(scope.ngModel) );
+        scope.options = normalizeOptions(angular.copy(scope.ngModel));
       }
 
       var angularCallback = config.onInitialize;
