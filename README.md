@@ -46,21 +46,7 @@ Add the selectize module as a dependency to your application module:
 var myAppModule = angular.module('MyApp', ['selectize']);
 ```
 
-## Basic Usage
-Setup your controller variables:
-
-```javascript
-$scope.myModel;
-$scope.myOptions = ['Spectrometer', 'Star Chart', 'Laser Pointer'];
-```
-
-Add the selectize element to your view template:
-
-```html
-<selectize options='myOptions' ng-model="myModel"></selectize>
-```
-
-## Advanced Usage
+## Usage
 
 ```javascript
 $scope.myModel = 1;
