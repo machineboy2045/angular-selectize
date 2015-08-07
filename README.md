@@ -3,12 +3,12 @@ angular-selectize
 ![selectize5](https://cloud.githubusercontent.com/assets/4087667/5633745/2cfeac18-958f-11e4-9e62-6eba90547b4c.png)
 
 ###Demo
-[Try the Demo on Plunker](http://plnkr.co/edit/X2YYPX?p=preview)
+[Try the Demo on Plunker](http://plnkr.co/edit/nTf19f?p=preview)
 
 ###Features
 This is an Angular.js directive for Brian Reavis's [selectize jQuery plugin](http://brianreavis.github.io/selectize.js/). It supports all of Selectize's features. Here are some highlights:
 
-* Better performance than UI-Select ([ui-select](http://plnkr.co/edit/pSJNHS?p=preview) vs [angular-selectize](http://plnkr.co/edit/xdyzf9?p=preview))
+* Better performance than UI-Select ([ui-select](http://plnkr.co/edit/pSJNHS?p=preview) vs [angular-selectize](http://plnkr.co/edit/23VkhV?p=preview))
 * Selectize is ~7kb (gzipped)
 * Smart Ranking / Multi-Property Searching & Sorting
 * Angular Models & Bindings
