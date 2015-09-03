@@ -90,6 +90,19 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
           }
         }
       };
+      
+      config.onOptionClear = function () {
+          if (scope.disableOnOptionClear)
+              return;
+
+          if (scope.options) {
+              scope.options.length = 0;
+          }
+
+          if (onOptionClear) {
+              onOptionClear.apply(this, arguments);
+          }
+      };
 
       if(scope.options){
         // replace scope options with generated options while retaining a reference to the same array
@@ -114,7 +127,9 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
         scope.$watch('options', function() {
           scope.disableOnChange = true;
+          scope.disableOnOptionClear = true;
           selectize.clearOptions();
+          scope.disableOnOptionClear = false;
           selectize.addOption(scope.options);
           selectize.setValue(scope.ngModel);
           scope.disableOnChange = false;
