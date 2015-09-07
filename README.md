@@ -3,7 +3,7 @@ angular-selectize
 ![selectize5](https://cloud.githubusercontent.com/assets/4087667/5633745/2cfeac18-958f-11e4-9e62-6eba90547b4c.png)
 
 ###Demo
-[Try the Demo on Plunker](http://plnkr.co/edit/nTf19f?p=preview)
+[Try the Demo on Plunker](http://plnkr.co/edit/GoTWSO?p=preview)
 
 ###Features
 This is an Angular.js directive for Brian Reavis's [selectize jQuery plugin](http://brianreavis.github.io/selectize.js/). It supports all of Selectize's features. Here are some highlights:

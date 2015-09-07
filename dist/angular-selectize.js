@@ -7,7 +7,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
   return {
     restrict: 'EA',
     require: '^ngModel',
-    scope: { ngModel: '=', config: '=?', options: '=?', ngDisabled: '=', ngRequired: '&' },
+    scope: { ngModel: '=', config: '=?', options: '=?', optgroups: '=?', ngDisabled: '=', ngRequired: '&' },
     link: function(scope, element, attrs, modelCtrl) {
 
       var selectize,
@@ -40,6 +40,20 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         selectize.addOption(curr, true);
 
         setSelectizeValue();
+      }
+
+      var setSelectizeOptgroups = function(curr, prev) {
+        console.log(curr, prev);
+        angular.forEach(prev, function(opt){
+          if(curr.indexOf(opt) === -1){
+            var value = opt[settings.valueField];
+            selectize.removeOptionGroup(value);
+          }
+        });
+
+        angular.forEach(curr, function(opt){
+          selectize.registerOptionGroup(opt);
+        });
       }
 
       var setSelectizeValue = function() {
@@ -80,6 +94,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       settings.onInitialize = function() {
         selectize = element[0].selectize;
 
+        setSelectizeOptgroups(scope.optgroups);
         setSelectizeOptions(scope.options);
 
         //provides a way to access the selectize element from an
@@ -89,6 +104,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         }
 
         scope.$watchCollection('options', setSelectizeOptions);
+        scope.$watchCollection('optgroups', setSelectizeOptgroups);
         scope.$watch('ngModel', setSelectizeValue);
         scope.$watch('ngDisabled', toggle);
       };
