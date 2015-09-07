@@ -20,6 +20,8 @@ This is an Angular.js directive for Brian Reavis's [selectize jQuery plugin](htt
 Previous versions supported simple arrays for options `['Option 1', 'Option 2']`. Version 3.0 drops this in order
 to simplify the directive and make it more consistent with the original Selectize.
 
+Also note the main js file has been renamed from `'selectize.js'` to `'angular-selectize.js'`.
+
 
 ## Dependencies
 
