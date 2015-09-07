@@ -80,7 +80,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       settings.onInitialize = function() {
         selectize = element[0].selectize;
 
-        setSelectizeOptions(scope.options, []);
+        setSelectizeOptions(scope.options);
 
         //provides a way to access the selectize element from an
         //angular controller
