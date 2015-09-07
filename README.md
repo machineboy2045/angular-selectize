@@ -16,7 +16,9 @@ This is an Angular.js directive for Brian Reavis's [selectize jQuery plugin](htt
 * Keyboard support
 
 
-
+## Upgrading to version 3.x.x
+Previous versions supported simple arrays for options `['Option 1', 'Option 2']`. Version 3.0 drops this in order
+to simplify the directive and make it more consistent with the original Selectize.
 
 
 ## Dependencies
@@ -74,9 +76,10 @@ $scope.myConfig = {
 ```html
 <selectize config='myConfig' options='myOptions' ng-model="myModel"></selectize>
 ```
+##Differences in Angular version
+Please note in the example that, unlike the original Selectize, options should NOT be passed in the config object.
 
-
-##Documentation
+##More Documentation
 - [Selectize config options](https://github.com/brianreavis/selectize.js/blob/master/docs/usage.md)
 - [Selectize API](https://github.com/brianreavis/selectize.js/blob/master/docs/api.md)
 
