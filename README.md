@@ -40,7 +40,7 @@ Load the script files in your application:
 <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
 <script type="text/javascript" src="bower_components/selectize/dist/js/standalone/selectize.min.js"></script>
 <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-<script type="text/javascript" src="bower_components/angular-selectize2/dist/selectize.js"></script>
+<script type="text/javascript" src="bower_components/angular-selectize2/dist/angular-selectize.js"></script>
 ```
 
 
