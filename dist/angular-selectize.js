@@ -39,6 +39,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
         selectize.addOption(curr, true);
 
+        selectize.refreshOptions(false); // updates results if user has entered a query
         setSelectizeValue();
       }
 
