@@ -52,7 +52,20 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         selectize.$control.toggleClass('ng-pristine', modelCtrl.$pristine);
 
         if (!angular.equals(selectize.items, scope.ngModel)) {
-          selectize.setValue(scope.ngModel, true);
+
+            if (scope.ngModel != null
+                && selectize.getOption(scope.ngModel).length == 0
+                && scope.config.fetchOption) {
+
+                scope.config.fetchOption(scope.ngModel, function (item) {
+                    selectize.addOption(item);
+                    selectize.setValue(scope.ngModel, true);
+                })
+
+            } else {
+                selectize.setValue(scope.ngModel, true);
+            }
+
         }
       }
 
