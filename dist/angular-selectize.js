@@ -17,12 +17,12 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       scope.config = scope.config || {};
 
       var isEmpty = function(val) {
-        return val === undefined || val === null || !val.length; //support checking empty arrays
+        return val === undefined || val === null || val.length === 0; // support checking empty arrays / strings
       };
 
       var toggle = function(disabled) {
         disabled ? selectize.disable() : selectize.enable();
-      }
+      };
 
       var validate = function() {
         var isInvalid = (scope.ngRequired() || attrs.required || settings.required) && isEmpty(scope.ngModel);
@@ -30,18 +30,24 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       };
 
       var setSelectizeOptions = function(curr, prev) {
-        angular.forEach(prev, function(opt){
-          if(curr.indexOf(opt) === -1){
+        if (scope._noUpdate) { // Internal changes to scope.options, eschew the watch mechanism
+          scope._noUpdate = false;
+          return;
+        }
+        angular.forEach(prev, function(opt) {
+          if (curr.indexOf(opt) === -1) {
             var value = opt[settings.valueField];
             selectize.removeOption(value, true);
           }
         });
+        angular.forEach(curr, function(opt) {
+          selectize.registerOption(opt);
+        });
+        selectize.lastQuery = undefined; // Hack because of a Selectize bug...
+        selectize.refreshOptions(false); // Update the content of the drop-down
 
-        selectize.addOption(curr, true);
-
-        selectize.refreshOptions(false); // updates results if user has entered a query
         setSelectizeValue();
-      }
+      };
 
       var setSelectizeValue = function() {
         validate();
@@ -54,27 +60,47 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         if (!angular.equals(selectize.items, scope.ngModel)) {
           selectize.setValue(scope.ngModel, true);
         }
-      }
+      };
 
       settings.onChange = function(value) {
-        var value = angular.copy(selectize.items);
-        if (settings.maxItems == 1) {
-          value = value[0]
+        var items = angular.copy(selectize.items);
+        if (settings.maxItems === 1) {
+          items = items[0];
         }
-        modelCtrl.$setViewValue( value );
+        modelCtrl.$setViewValue(items);
 
         if (scope.config.onChange) {
           scope.config.onChange.apply(this, arguments);
         }
       };
 
+      // User entered a new tag.
       settings.onOptionAdd = function(value, data) {
-        if( scope.options.indexOf(data) === -1 ) {
+        if (scope.options.indexOf(data) === -1) {
+          scope._noUpdate = true;
           scope.options.push(data);
+        }
+        if (scope.config.onOptionAdd) {
+          scope.config.onOptionAdd.apply(this, arguments);
+        }
+      };
 
-          if (scope.config.onOptionAdd) {
-            scope.config.onOptionAdd.apply(this, arguments);
+      // User removed a tag they entered.
+      // Note: it is not called if persist is true.
+      settings.onOptionRemove = function(value) {
+        var idx = -1;
+        for (var i = 0; i < scope.options.length; i++) {
+          if (scope.options[i][scope.config.valueField] === value) {
+            idx = i;
+            break;
           }
+        }
+        if (idx !== -1 ) {
+          scope._noUpdate = true;
+          scope.options.splice(idx, 1);
+        }
+        if (scope.config.onOptionRemove) {
+          scope.config.onOptionRemove.apply(this, arguments);
         }
       };
 
