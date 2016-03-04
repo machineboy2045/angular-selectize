@@ -30,16 +30,20 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       };
 
       var setSelectizeOptions = function(curr, prev) {
+        if (!curr)
+          return;
         if (scope._noUpdate) { // Internal changes to scope.options, eschew the watch mechanism
           scope._noUpdate = false;
           return;
         }
+        scope._skipRemove = true;
         angular.forEach(prev, function(opt) {
           if (curr.indexOf(opt) === -1) {
             var value = opt[settings.valueField];
             selectize.removeOption(value, true);
           }
         });
+        scope._skipRemove = false;
         angular.forEach(curr, function(opt) {
           selectize.registerOption(opt);
         });
@@ -85,9 +89,11 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         }
       };
 
-      // User removed a tag they entered.
+      // User removed a tag they entered, or we called removeOption().
       // Note: it is not called if persist is true.
       settings.onOptionRemove = function(value) {
+        if (scope._skipRemove)
+          return;
         var idx = -1;
         for (var i = 0; i < scope.options.length; i++) {
           if (scope.options[i][scope.config.valueField] === value) {
