@@ -62,7 +62,14 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         selectize.$control.toggleClass('ng-pristine', modelCtrl.$pristine);
 
         if (!angular.equals(selectize.items, scope.ngModel)) {
-          selectize.setValue(scope.ngModel, true);
+          if (scope.config.create && angular.isArray(scope.ngModel)) {
+            // Items might be in model but not in options: we create them in both, as user options
+            for (var i = 0; i < scope.ngModel.length; i++) {
+              selectize.createItem(scope.ngModel[i], false);
+            }
+          } else {
+            selectize.setValue(scope.ngModel, true);
+          }
         }
       };
 
