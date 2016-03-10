@@ -49,8 +49,6 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         });
         selectize.lastQuery = undefined; // Hack because of a Selectize bug...
         selectize.refreshOptions(false); // Update the content of the drop-down
-
-        setSelectizeValue();
       };
 
       var setSelectizeValue = function() {
@@ -63,10 +61,25 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
         if (!angular.equals(selectize.items, scope.ngModel)) {
           if (scope.config.create && angular.isArray(scope.ngModel)) {
+            scope._silentChanges = true; // addOption / createItem has no silent option!
             // Items might be in model but not in options: we create them in both, as user options
             for (var i = 0; i < scope.ngModel.length; i++) {
-              selectize.createItem(scope.ngModel[i], false);
+              var item = scope.ngModel[i];
+              var found = false;
+              for (var j = 0; j < scope.options.length; j++) {
+                if (scope.options[j][settings.valueField] === item) {
+                  found = true;
+                  break;
+                }
+              }
+              if (found) { // Existing option, just add it to the item list
+                selectize.addItem(item, true);
+              } else { // Not a known option, create it along with the item
+                selectize.createItem(item, false);
+              }
             }
+            scope._silentChanges = false;
+            settings.onChange(scope.ngModel);
           } else {
             selectize.setValue(scope.ngModel, true);
           }
@@ -74,6 +87,8 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       };
 
       settings.onChange = function(value) {
+        if (scope._silentChanges)
+          return; // Avoid intermediary updates and side effects
         var items = angular.copy(selectize.items);
         if (settings.maxItems === 1) {
           items = items[0];
@@ -108,7 +123,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
             break;
           }
         }
-        if (idx !== -1 ) {
+        if (idx !== -1) {
           scope._noUpdate = true;
           scope.options.splice(idx, 1);
         }
