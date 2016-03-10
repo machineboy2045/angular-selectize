@@ -62,6 +62,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         if (!angular.equals(selectize.items, scope.ngModel)) {
           if (scope.config.create && angular.isArray(scope.ngModel)) {
             scope._silentChanges = true; // addOption / createItem has no silent option!
+            selectize.clear(true);
             // Items might be in model but not in options: we create them in both, as user options
             for (var i = 0; i < scope.ngModel.length; i++) {
               var item = scope.ngModel[i];
@@ -144,7 +145,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         }
 
         scope.$watchCollection('options', setSelectizeOptions);
-        scope.$watch('ngModel', setSelectizeValue);
+        scope.$watchCollection('ngModel', setSelectizeValue);
         scope.$watch('ngDisabled', toggle);
       };
 
