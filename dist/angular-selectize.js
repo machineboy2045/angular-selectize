@@ -22,7 +22,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
       var toggle = function(disabled) {
         disabled ? selectize.disable() : selectize.enable();
-      }
+      };
 
       var validate = function() {
         var isInvalid = (scope.ngRequired() || attrs.required || settings.required) && isEmpty(scope.ngModel);
@@ -41,20 +41,22 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
         selectize.refreshOptions(false); // updates results if user has entered a query
         setSelectizeValue();
-      }
+      };
 
       var setSelectizeValue = function() {
+        if (!angular.equals(selectize.items, scope.ngModel)) {
+          selectize.setValue(scope.ngModel, true);
+        }
+
+        // validate should run after set value because
+        // else we have a bug with novalid input with default value
         validate();
 
         selectize.$control.toggleClass('ng-valid', modelCtrl.$valid);
         selectize.$control.toggleClass('ng-invalid', modelCtrl.$invalid);
         selectize.$control.toggleClass('ng-dirty', modelCtrl.$dirty);
         selectize.$control.toggleClass('ng-pristine', modelCtrl.$pristine);
-
-        if (!angular.equals(selectize.items, scope.ngModel)) {
-          selectize.setValue(scope.ngModel, true);
-        }
-      }
+      };
 
       settings.onChange = function(value) {
         var value = angular.copy(selectize.items);
