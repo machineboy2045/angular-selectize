@@ -7,7 +7,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
   return {
     restrict: 'EA',
     require: '^ngModel',
-    scope: { ngModel: '=', config: '=?', options: '=?', ngDisabled: '=', ngRequired: '&' },
+    scope: { ngModel: '=', config: '=?', options: '=?', ngDisabled: '=', ngRequired: '&', tabindex: '=' },
     link: function(scope, element, attrs, modelCtrl) {
 
       var selectize,
@@ -15,6 +15,10 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
       scope.options = scope.options || [];
       scope.config = scope.config || {};
+
+      if (!isNaN(scope.tabindex)) {
+          element[0].tabIndex = scope.tabindex;
+      } 
 
       var isEmpty = function(val) {
         return val === undefined || val === null || !val.length; //support checking empty arrays
