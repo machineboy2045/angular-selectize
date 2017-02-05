@@ -59,7 +59,13 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       settings.onChange = function(value) {
         var value = angular.copy(selectize.items);
         if (settings.maxItems == 1) {
-          value = value[0]
+          value = value[0];
+
+          //set null instead of undefined to keep the attribute in
+          //a serialized JSON
+          if (typeof value === 'undefined') {
+            value = null;
+          }
         }
         modelCtrl.$setViewValue( value );
 
