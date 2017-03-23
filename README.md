@@ -81,7 +81,7 @@ $scope.myConfig = {
 ## Differences in Angular version
 Please note in the example that, unlike the original Selectize, options should NOT be passed in the config object.
 
-##More Documentation
+## More Documentation
 - [Selectize config options](https://github.com/brianreavis/selectize.js/blob/master/docs/usage.md)
 - [Selectize API](https://github.com/brianreavis/selectize.js/blob/master/docs/api.md)
 
