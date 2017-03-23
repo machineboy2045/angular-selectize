@@ -2,10 +2,10 @@ angular-selectize
 ==================
 ![selectize5](https://cloud.githubusercontent.com/assets/4087667/5633745/2cfeac18-958f-11e4-9e62-6eba90547b4c.png)
 
-###Demo
+### Demo
 [Try the Demo on Plunker](http://plnkr.co/edit/nTf19f?p=preview)
 
-###Features
+### Features
 This is an Angular.js directive for Brian Reavis's [selectize jQuery plugin](http://brianreavis.github.io/selectize.js/). It supports all of Selectize's features. Here are some highlights:
 
 * Better performance than UI-Select ([ui-select](http://plnkr.co/edit/pSJNHS?p=preview) vs [angular-selectize](http://plnkr.co/edit/23VkhV?p=preview))
@@ -78,22 +78,22 @@ $scope.myConfig = {
 ```html
 <selectize config='myConfig' options='myOptions' ng-model="myModel"></selectize>
 ```
-##Differences in Angular version
+## Differences in Angular version
 Please note in the example that, unlike the original Selectize, options should NOT be passed in the config object.
 
 ##More Documentation
 - [Selectize config options](https://github.com/brianreavis/selectize.js/blob/master/docs/usage.md)
 - [Selectize API](https://github.com/brianreavis/selectize.js/blob/master/docs/api.md)
 
-##Config
-####Inline
+## Config
+#### Inline
 
 ```html
 <selectize config="{create:true, maxItems:10}" options='myOptions' ng-model="myModel"></selectize>
 ```
 
 
-####Global
+#### Global
 To define global defaults, you can configure the `selectize` injectable:
 
 ```javascript
