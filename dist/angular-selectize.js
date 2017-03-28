@@ -17,12 +17,12 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       scope.config = scope.config || {};
 
       var isEmpty = function(val) {
-        return val === undefined || val === null || !val.length; //support checking empty arrays
+        return val === undefined || val === null || (angular.isArray(val) && !val.length); //support checking empty arrays
       };
 
       var toggle = function(disabled) {
         disabled ? selectize.disable() : selectize.enable();
-      }
+      };
 
       var validate = function() {
         var isInvalid = (scope.ngRequired() || attrs.required || settings.required) && isEmpty(scope.ngModel);
@@ -41,7 +41,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
         selectize.refreshOptions(false); // updates results if user has entered a query
         setSelectizeValue();
-      }
+      };
 
       var setSelectizeValue = function() {
         validate();
