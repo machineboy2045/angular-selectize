@@ -1,7 +1,7 @@
 {
   "name": "angular-selectize2",
   "description": "This is an Angular.js directive for Brian Reavis's selectize jQuery plugin. It supports all of Selectize's features",
-  "main": "dist/selectize.js",
+  "main": "dist/angular-selectize.js",
   "version": "v3.0.1",
   "private": false
 }
