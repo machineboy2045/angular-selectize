@@ -3,7 +3,6 @@
   "description": "DeBanke-Group Fork of: machineboy2045/angular-selectize",
   "main": "dist/angular-selectize.js",
   "version": "v3.0.2",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/deBankeGroup/angular-selectize.git"
