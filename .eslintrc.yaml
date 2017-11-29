@@ -1,0 +1,10 @@
+---
+plugins:
+  - angular
+extends: plugin:angular/johnpapa
+
+rules:
+  angular/file-name:
+    - 0
+  angular/directive-restrict:
+    - 0

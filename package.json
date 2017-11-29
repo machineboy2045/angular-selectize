@@ -7,6 +7,10 @@
     "type": "git",
     "url": "git://github.com/deBankeGroup/angular-selectize.git"
   },
+  "scripts": {
+      "test": "node_modules/.bin/eslint .",
+      "postversion": "git symbolic-ref --short HEAD | xargs git push --set-upstream origin && git push --tags"
+  },
   "keywords": [
     "angular"
   ],
@@ -18,5 +22,10 @@
   "homepage": "https://github.com/deBankeGroup/angular-selectize",
   "dependencies": {
     "selectize": ">=0.12.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.12.0",
+    "eslint-plugin-angular": "^3.1.1",
+    "eslint-plugin-import": "^2.8.0"
   }
 }

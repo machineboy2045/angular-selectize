@@ -1,3 +1,7 @@
+# 3.0.3
+
+- Added linting via eslint
+
 # 3.0.2
 
 - Fork into debanke-group and publish.
