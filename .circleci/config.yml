@@ -26,9 +26,7 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
       - deploy:
           name: NPM Publish
-          command: |
-            chmod +x publish.sh
-            ./publish.sh
+          command: ./circleci/publish.sh
 
 workflows:
   version: 2
@@ -40,4 +38,3 @@ workflows:
         context: org-global
         requires:
           - build
-
