@@ -1,3 +1,9 @@
+## 3.0.3 (2017-03-26)
+
+Changes:
+
+  - Updated package.json so it was valid. 
+
 ## 3.0.2 (2017-03-26)
 
 Changes:
