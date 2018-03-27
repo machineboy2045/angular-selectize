@@ -1,6 +1,29 @@
 {
   "name": "angular-selectize2",
+  "keywords": [
+    "select",
+    "ui",
+    "form",
+    "input",
+    "control",
+    "autocomplete",
+    "tagging",
+    "angular",
+    "directive",
+    "tag"
+  ],
+  "main": "dist/angular-selectize.js",
   "description": "This is an Angular.js directive for Brian Reavis's selectize jQuery plugin. It supports all of Selectize's features",
   "version": "v3.0.2",
-  "private": false
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/machineboy2045/angular-selectize.git"
+  },
+  "dependencies": {
+    "selectize": ">=0.12.1"
+  },
+  "engines": {
+    "node": "*"
+  }
 }
