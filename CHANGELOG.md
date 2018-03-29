@@ -1,3 +1,10 @@
+## 3.0.2 (2017-03-26)
+
+Changes:
+
+  - Updated version so a new tag/release can be created where the version in the package.json version matches the tag/release version 
+  - Updated package.json so it was valid.
+  
 ## 3.0.1 (2015-09-07)
 
 Documentation:
