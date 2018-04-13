@@ -7,7 +7,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
   return {
     restrict: 'EA',
     require: '^ngModel',
-    scope: { ngModel: '=', config: '=?', options: '=?', ngDisabled: '=', ngRequired: '&' },
+    scope: { ngModel: '=', config: '=?', options: '=?', ngDisabled: '=', ngRequired: '&', clearOption: '@' },
     link: function(scope, element, attrs, modelCtrl) {
 
       var selectize,
@@ -39,7 +39,6 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
         selectize.addOption(curr, true);
 
-        selectize.refreshOptions(false); // updates results if user has entered a query
         setSelectizeValue();
       }
 
@@ -57,10 +56,20 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       }
 
       settings.onChange = function(value) {
+
         var value = angular.copy(selectize.items);
+
         if (settings.maxItems == 1) {
-          value = value[0]
+          value = value[0];
+
+          if(!isEmpty(scope.clearOption)) {
+            if(value == scope.clearOption) {
+              selectize.clear();
+              return;
+            }
+          }
         }
+
         modelCtrl.$setViewValue( value );
 
         if (scope.config.onChange) {
@@ -80,6 +89,15 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
       settings.onInitialize = function() {
         selectize = element[0].selectize;
+
+        if(!isEmpty(scope.clearOption)) {
+            var clearOption = {};
+
+            clearOption[ settings.valueField ] = scope.clearOption;
+            clearOption[ settings.labelField ] = scope.clearOption;
+
+            scope.options.splice(0, 0, clearOption);
+        }
 
         setSelectizeOptions(scope.options);
 
