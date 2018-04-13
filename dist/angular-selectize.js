@@ -93,8 +93,8 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         scope.$watch('ngModel', setSelectizeValue);
         scope.$watch('ngDisabled', toggle);
       };
-
-      element.selectize(settings);
+      // we must to check for library in element prototype, if not - we should to append it
+      (element.jquery?element:jQuery(element)).selectize(settings);
 
       element.on('$destroy', function() {
         if (selectize) {
