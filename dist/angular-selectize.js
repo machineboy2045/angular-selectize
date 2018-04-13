@@ -17,12 +17,15 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       scope.config = scope.config || {};
 
       var isEmpty = function(val) {
-        return val === undefined || val === null || !val.length; //support checking empty arrays
+        if(angular.isArray(val)) {
+          return (val.length === 0);
+        }
+        return modelCtrl.$isEmpty(val); //call to real Angular function
       };
 
       var toggle = function(disabled) {
         disabled ? selectize.disable() : selectize.enable();
-      }
+      };
 
       var validate = function() {
         var isInvalid = (scope.ngRequired() || attrs.required || settings.required) && isEmpty(scope.ngModel);
@@ -41,20 +44,19 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
         selectize.refreshOptions(false); // updates results if user has entered a query
         setSelectizeValue();
-      }
+      };
 
       var setSelectizeValue = function() {
+        if (!angular.equals(selectize.items, scope.ngModel)) {
+          selectize.setValue(scope.ngModel, true);
+        }
         validate();
 
         selectize.$control.toggleClass('ng-valid', modelCtrl.$valid);
         selectize.$control.toggleClass('ng-invalid', modelCtrl.$invalid);
         selectize.$control.toggleClass('ng-dirty', modelCtrl.$dirty);
         selectize.$control.toggleClass('ng-pristine', modelCtrl.$pristine);
-
-        if (!angular.equals(selectize.items, scope.ngModel)) {
-          selectize.setValue(scope.ngModel, true);
-        }
-      }
+      };
 
       settings.onChange = function(value) {
         var value = angular.copy(selectize.items);
