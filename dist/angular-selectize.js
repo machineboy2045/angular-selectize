@@ -4,6 +4,7 @@
  **/
 
 // jsruok MOD 2017-06-14: isEmpty array check redefined
+// jsruok MOD 2019-06-20: selectize.items, scope.ngModel comparison refined
 
 angular.module('selectize', []).value('selectizeConfig', {}).directive("selectize", ['selectizeConfig', function(selectizeConfig) {
   return {
@@ -54,7 +55,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         selectize.$control.toggleClass('ng-pristine', modelCtrl.$pristine);
 
         if (settings.maxItems !== 1 && !angular.equals(selectize.items, scope.ngModel) ||
-          selectize.items[0] != scope.ngModel) {
+          selectize.items[0] != scope.ngModel) { // If maxItems is 1, items is an array and ngModel is a string
           selectize.setValue(scope.ngModel, true);
         }
       }
