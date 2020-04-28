@@ -26,7 +26,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
 
       var validate = function() {
         var isInvalid = (scope.ngRequired() || attrs.required || settings.required) && isEmpty(scope.ngModel);
-        modelCtrl.$setValidity('required', !isInvalid);
+        modelCtrl.$setValidity('selectize_required', !isInvalid);
       };
 
       var setSelectizeOptions = function(curr, prev) {
