@@ -3,6 +3,9 @@
  * https://github.com/machineboy2045/angular-selectize
  **/
 
+// jsruok MOD 2017-06-14: isEmpty array check redefined
+// jsruok MOD 2019-06-20: selectize.items, scope.ngModel comparison refined
+
 angular.module('selectize', []).value('selectizeConfig', {}).directive("selectize", ['selectizeConfig', function(selectizeConfig) {
   return {
     restrict: 'EA',
@@ -17,7 +20,7 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
       scope.config = scope.config || {};
 
       var isEmpty = function(val) {
-        return val === undefined || val === null || !val.length; //support checking empty arrays
+        return val === undefined || val === null || (val && typeof val === 'object' && !val.length); //support checking empty arrays // MOD: !val.length => (val && typeof val === 'object' && !val.length)
       };
 
       var toggle = function(disabled) {
@@ -51,7 +54,8 @@ angular.module('selectize', []).value('selectizeConfig', {}).directive("selectiz
         selectize.$control.toggleClass('ng-dirty', modelCtrl.$dirty);
         selectize.$control.toggleClass('ng-pristine', modelCtrl.$pristine);
 
-        if (!angular.equals(selectize.items, scope.ngModel)) {
+        if (settings.maxItems !== 1 && !angular.equals(selectize.items, scope.ngModel) ||
+          settings.maxItems === 1 && selectize.items[0] != scope.ngModel) { // If maxItems is 1, items is an array and ngModel is a string
           selectize.setValue(scope.ngModel, true);
         }
       }
